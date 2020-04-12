@@ -1,0 +1,26 @@
+{
+  "name": "public-grievances-app",
+  "version": "1.0.0",
+  "description": "The idea of the application is to allow users (citizens) to post public grievances instantaneously on the web application. The admins (public workers) then verifies the complaint, handles it, and resolves the issue. The value of the application is a platform for easy communication between citizens and local/state government.  This web application can be deployed and integrated in the public service sector of government (police, fire department, etc).",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ygunarso/public-grievances-app.git"
+  },
+  "author": "Yohanes Steven Gunarso, Samir Shah, Rajit Gohel, Devila Bakrania",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ygunarso/public-grievances-app/issues"
+  },
+  "homepage": "https://github.com/ygunarso/public-grievances-app#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-handlebars": "^4.0.3",
+    "handlebars": "^4.7.6",
+    "mongodb": "^3.5.5"
+  }
+}
