@@ -6,7 +6,8 @@ const constructorMethod = app => {
   app.use("/users", usersRoutes);
 
   app.use("*", (req, res) => {
-    res.redirect("/");
+    // res.redirect("/");
+    res.render('grievances/index');
   });
 };
 

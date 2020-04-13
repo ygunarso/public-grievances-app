@@ -4,10 +4,6 @@ const data = require('../data');
 const usersData = data.users;
 const { ObjectId } = require('mongodb');
 
-// router.get('/', async (req, res) => {
-//     res.render('grievances/index');
-// });
-
 router.get('/:id', async (req, res) => {
 	try {
 		let user = await usersData.getUserById(req.params.id);
