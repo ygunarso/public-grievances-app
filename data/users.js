@@ -34,6 +34,59 @@ let exportedMethods = {
       const newInsertInformation = await userCollection.insertOne(newUser);
       if (newInsertInformation.insertedCount === 0) throw 'Insert failed!';
       return await this.getUserById(newInsertInformation.insertedId);
+    },
+    async updateUser(userId, firstName, lastName, email, city,
+      state) {
+  
+      const userCollection = await users();
+      const updatedUserData = {};
+  
+      if (firstName) {
+        updatedUserData.firstName = firstName;
+      }
+      if (lastName) {
+        updatedUserData.lastName = lastName;
+      }
+      if (email) {
+        updatedUserData.email = email;
+      }
+      if (city) {
+        updatedUserData.city = city;
+      }
+      if (state) {
+        updatedUserData.state = state;
+      }
+  
+      const updatedInfo = await userCollection.updateOne({ _id: ObjectId(userId) }, { $set: updatedUserData });
+      if (updatedInfo.modifiedCount === 0) {
+        throw 'could not update the user successfully';
+      }
+  
+      return await this.getUserById(userId);
+  
+    },
+
+    async removeUser(id) { // same as pdf
+      const userCollection = await users();
+  
+      let userdel = null;
+      try {
+        userdel = await this.getUserById(id);
+      } catch (e) {
+        console.log(e);
+        return;
+      }
+      const deletionInfo = await userCollection.removeOne({ _id: ObjectId(id) });
+      if (deletionInfo.deletedCount === 0) {
+        throw "Could not delete the User";
+      }
+  
+      return true;
+  
     }
+  
+  
+
+
    };
 module.exports = exportedMethods;
