@@ -19,14 +19,14 @@ let exportedMethods = {
       const user = await userCollection.findOne({_id: id});
       return user
     },
-    async addUser(firstName,lastName,email,city,state) {
+    async addUser(firstName,lastName,email,hashedPassword,city,state) {
       const userCollection = await users();
       let newUser = {
         firstName: firstName,
         lastName : lastName,
         email : email,
+        hashedPassword : hashedPassword,
         city : city,
-        // hashedPassword : hashedPassword,
         issues: [],
         state : state 
       };

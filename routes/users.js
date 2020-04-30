@@ -3,6 +3,8 @@ const router = express.Router();
 const data = require('../data');
 const usersData = data.users;
 const { ObjectId } = require('mongodb');
+const session = require('express-session');
+const bcrypt = require('bcryptjs');
 
 router.get('/:id', async (req, res) => {
 	try {
@@ -28,7 +30,7 @@ router.post('/', async (req, res) => {
 	if (!userInfo) {
 		res.status(400).json({ error: 'You must provide data to create a user' });
 		return;
-	}
+    }
 	if (!userInfo.firstName) {
 		res.status(400).json({ error: 'You must provide a first name' });
 		return;
@@ -44,21 +46,28 @@ router.post('/', async (req, res) => {
 	if (!userInfo.city) {
 		res.status(400).json({ error: 'You must provide city' });
 		return;
-	}
+    }
+    if(!userInfo.hashedPassword){
+        res.status(400).json({ error: 'You must provide password' });
+		return;
+    }
 	if (!userInfo.state) {
 			res.status(400).json({ error: 'You must provide state' });
 			return;
 	}
 	try {
-		const newUser = await usersData.addUser(userInfo.firstName,userInfo.lastName,userInfo.email,userInfo.city,userInfo.state);
-		res.json(newUser);
+		const newUser = await usersData.addUser(userInfo.firstName,userInfo.lastName,userInfo.email,userInfo.hashedPassword,userInfo.city,userInfo.state);
+        //res.json(newUser);
+        req.session.user = newUser.email
+        req.session.AuthCookie = req.sessionID;
+        let sessionInfo = req.session.user
+        res.render('grievances/profile',{newUser:newUser,sessionInfo:sessionInfo});
 	} catch (e) {
 		res.sendStatus(400);
 	}
 });
 
-router.
-    put('/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
         const updatedData = req.body;
         if (!updatedData.firstName || !updatedData.lastName || !updatedData.email || !updatedData.city || !updatedData.state) {
             res.status(400).json({ error: 'Please provide all the user information to update your registration' });
