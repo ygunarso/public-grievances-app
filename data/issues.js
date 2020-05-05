@@ -4,7 +4,12 @@ const users = require('./users');
 const { ObjectId } = require('mongodb');
 
 let exportedMethods = {
-    async getAllIssuesByUserId(userID) {
+    async getAllIssues() {
+        const issueCollection = await issues();
+        const issueList = await issueCollection.find({}).sort({ date: -1 }).toArray();
+        return issueList;
+    },
+    async getIssuesByUserId(userID) {
         const issues = users.getUserById(userID).issues;
         const issueCollection = await issues();
         for (let issue of issues) {
@@ -29,7 +34,6 @@ let exportedMethods = {
         if (!userID) throw 'User ID missing.';
 
         const issueCollection = await issues();
-
         let newIssue = {
             category: category,
             date: date,
@@ -42,15 +46,58 @@ let exportedMethods = {
             userID: userID,
             comments: []
         };
-
         const issueInfo = await issueCollection.insertOne(newIssue);
         if (issueInfo.insertedCount === 0) throw 'Could not add issue';
-
         const id = insertInfo.insertedId;
+        const issue = await this.getIssueById(id);
+        return issue;
+    },
+    async getIssuesByCategory(category) {
+        const issueCollection = await issues();
+        const issueList = await issueCollection.find({ category: category })
+                                .sort({ date: -1 }).toArray();
+        return issueList;
+    },
+    async getIssuesByCity(city) {
+        const issueCollection = await issues();
+        const issueList = await issueCollection.find({ city: city })
+                                .sort({ date: -1 }).toArray();
+        return issueList;
+    },
+    async getIssuesByState(state) {
+        const issueCollection = await issues();
+        const issueList = await issueCollection.find({ state: state })
+                                .sort({ date: -1 }).toArray();
+        return issueList;
+    },
+    async getIssuesByStatus(status) {
+        const issueCollection = await issues();
+        const issueList = await issueCollection.find({ status: status })
+                                .sort({ date: -1 }).toArray();
+        return issueList;
+    },
+    async removeIssue(id) {
+        if (!id) throw 'Issue ID missing';
+        const issueCollection = await issues();
 
         const issue = await this.getIssueById(id);
+        const deletionInfo = await issueCollection.removeOne({ _id: id });
+        if (deletionInfo.deletedCount === 0) {
+          throw "Could not delete issue";
+        }
+        return true;
+    // },
+    // async closeIssue(id) {
+    //
+    // },
+    // async openIssue(id) {
+    //
+    // },
+    // async updateIssue(id) {
+    //
+    // },
+    // async addComment(name, comment) {
 
-        return issue;
     }
 };
 
