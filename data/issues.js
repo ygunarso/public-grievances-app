@@ -24,7 +24,8 @@ let exportedMethods = {
         const issue = await issueCollection.findOne({_id: id});
         return issue
     },
-    async addIssue(category, date, latitude, longitude, city, state, userID) {
+    async addIssue(name, category, date, latitude, longitude, city, state, userID) {
+        if (!name) throw 'Issue name missing.';
         if (!category) throw 'Category missing.';
         if (!date) throw 'Date missing.';
         if (!latitude) throw 'Latitude missing.';
@@ -35,6 +36,7 @@ let exportedMethods = {
 
         const issueCollection = await issues();
         let newIssue = {
+            name: name,
             category: category,
             date: date,
             likes: 0,
@@ -48,7 +50,7 @@ let exportedMethods = {
         };
         const issueInfo = await issueCollection.insertOne(newIssue);
         if (issueInfo.insertedCount === 0) throw 'Could not add issue';
-        const id = insertInfo.insertedId;
+        const id = issueInfo.insertedId;
         const issue = await this.getIssueById(id);
         return issue;
     },
