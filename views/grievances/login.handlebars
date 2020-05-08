@@ -6,15 +6,24 @@
     {{/if}}
     <form id="login-form" method="POST" action="/login">
         <label>Email</label>
-        <input type="text" id="email" name="email" placeholder="Enter Email">
+        <input type="email" id="email" name="email" placeholder="Enter Email">
         <br>
         <br>
-        <label>Password</label>
-        <input type="password" id="password" name="password" placeholder="Enter Password">
+        <label for="password" class="text">Password</label>
+        <input id="password" type="password" name="password" class="validate text" placeholder="Enter Password"
+            required>
+
+        <br>
+
+        {{!-- <label>Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter Password"> --}}
         <br>
         <br>
         <button type="submit">Submit</button>
         <br>
+
+        <a href="/signup">New User? Signup Here</a>
+
         <br>
     </form>
 </section>
