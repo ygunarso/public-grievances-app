@@ -54,5 +54,15 @@ router.get('/userhome', async (req, res) => {
 
 });
 
+router.get('/logout', async (req, res) => {
+    try {
+        req.session.destroy();
+        res.redirect('/');
+    } catch (error) {
+        res.status(401).json({ error: "Page Not Found" });
+    }
+
+});
+
 
 module.exports = router;
