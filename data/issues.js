@@ -16,13 +16,13 @@ let exportedMethods = {
             issue = this.getIssueById(issue);
         }
         if (!issueList) throw 'User has no issues!';
-        return issueList
+        return issueList;
     },
     async getIssueById(id) {
-        id = ObjectId(id)
+        id = ObjectId(id);
         const issueCollection = await issues();
         const issue = await issueCollection.findOne({_id: id});
-        return issue
+        return issue;
     },
     async addIssue(name, category, date, latitude, longitude, city, state, userID) {
         if (!name) throw 'Issue name missing.';

@@ -7,10 +7,11 @@ const { ObjectId } = require('mongodb');
 router.get('/:id', async (req, res) => {
 	try {
 		let issue = await issuesData.getIssueById(req.params.id);
-		if(issue === null || issue === undefined)
-			res.status(404).json({ error: 'issue not found' })
+		const issueList = [issue];
+		if(issueList === null || issueList === undefined)
+			res.status(404).json({ error: 'No issue found' })
 		else
-			res.json(issue);
+			res.render('grievances/issue',{issueList:issueList});
 	} catch (e) {
 		res.status(404).json({ error: 'issue not found' });
 	}
@@ -30,8 +31,8 @@ router.get('/:userid', async (req, res) => {
 
 router.get('/', async (req, res) => {
 	try {
-		let issueList = await issueData.getAllIssues();
-		res.json(issueList);
+		let issueList = await issuesData.getAllIssues();
+		res.render('grievances/issue',{issueList:issueList});
 	} catch (e) {
 		res.sendStatus(400);
 	}
