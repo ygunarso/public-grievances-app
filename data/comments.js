@@ -22,7 +22,7 @@ let exportedMethods = {
         if (updatedInfo.modifiedCount === 0) {
             throw 'Could not add comment.';
         }
-
+        
         return comment;
     }
 };
