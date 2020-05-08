@@ -25,6 +25,57 @@ router.get('/login', async (req, res) => {
     }
 
 });
+router.get('/signup', async (req, res) => {
+    try {
+        res.render('grievances/signup');
+    } catch (error) {
+        res.status(401).json({ error: "Page Not Found" });
+    }
+
+});
+
+router.post('/signup', async (req, res) => {
+    let userInfo = req.body;
+    if (!userInfo) {
+        res.status(400).json({ error: 'You must provide data to create a user' });
+        return;
+    }
+    if (!userInfo.firstName) {
+        res.status(400).json({ error: 'You must provide a first name' });
+        return;
+    }
+    if (!userInfo.lastName) {
+        res.status(400).json({ error: 'You must provide a last name' });
+        return;
+    }
+    if (!userInfo.email) {
+        res.status(400).json({ error: 'You must provide an email' });
+        return;
+    }
+    if (!userInfo.city) {
+        res.status(400).json({ error: 'You must provide city' });
+        return;
+    }
+    if (!userInfo.hashedPassword) {
+        res.status(400).json({ error: 'You must provide password' });
+        return;
+    }
+    if (!userInfo.state) {
+        res.status(400).json({ error: 'You must provide state' });
+        return;
+    }
+    try {
+        const newUser = await usersData.addUser(userInfo.firstName, userInfo.lastName, userInfo.email, userInfo.hashedPassword, userInfo.city, userInfo.state);
+        //res.json(newUser);
+        req.session.user = newUser.email
+        req.session.AuthCookie = req.sessionID;
+        let sessionInfo = req.session.user
+        res.render('grievances/profile', { newUser: newUser, sessionInfo: sessionInfo });
+    } catch (e) {
+        res.sendStatus(400);
+    }
+
+});
 
 router.post('/login', async (req, res) => {
     try {
