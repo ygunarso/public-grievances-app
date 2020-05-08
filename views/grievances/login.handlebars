@@ -1,0 +1,20 @@
+<section>
+    {{#if message}}
+    <div>
+        <p style="color:red">WRONG PASSWORD</p>
+    </div>
+    {{/if}}
+    <form id="login-form" method="POST" action="/login">
+        <label>Email</label>
+        <input type="text" id="email" name="email" placeholder="Enter Email">
+        <br>
+        <br>
+        <label>Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter Password">
+        <br>
+        <br>
+        <button type="submit">Submit</button>
+        <br>
+        <br>
+    </form>
+</section>
