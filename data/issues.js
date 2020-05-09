@@ -54,6 +54,7 @@ let exportedMethods = {
         const issueInfo = await issueCollection.insertOne(newIssue);
         if (issueInfo.insertedCount === 0) throw 'Could not add issue';
         const id = issueInfo.insertedId;
+        await users.addIssueToUser(user._id,newIssue)
         const issue = await this.getIssueById(id);
         return issue;
     },
