@@ -6,6 +6,8 @@ const { ObjectId } = require('mongodb');
 const session = require('express-session');
 const bcrypt = require('bcryptjs');
 
+
+
 router.get('/:id', async (req, res) => {
     try {
         let user = await usersData.getUserById(req.params.id);
@@ -131,11 +133,5 @@ router.delete('/:id', async (req, res) => {
         res.status(500).json({ error: e });
     }
 });
-
-
-
-
-
-
 
 module.exports = router;
