@@ -115,5 +115,55 @@ router.get('/logout', async (req, res) => {
 
 });
 
+// route to show User Profile
+
+router.get('/profile', async (req, res) => {
+    try {
+        const newUser = await usersData.getUserByEmail(req.session.user); //userId?
+        res.render('grievances/profile', { newUser: newUser })
+    } catch (e) {
+        res.render('grievances/error', { title: "error", message: e })
+    }
+
+});
+
+// profile update Routes
+
+router.get('/profileupdate', async (req, res) => {
+    try {
+        const newUser = await usersData.getUserByEmail(req.session.user);
+        res.render('grievances/profileupdate', { newUser: newUser })
+    } catch (e) {
+        res.render('grievances/error', { title: "error", message: e })
+    }
+
+});
+
+router.post('/profileupdate', async (req, res) => {
+    const requestBody = req.body;
+    let updatedObject = {};
+    try {
+        const oldPost = await usersData.getUserByEmail(req.session.user);
+        if (requestBody.firstName && requestBody.firstName !== oldPost.firstName) updatedObject.firstName = requestBody.firstName;
+        if (requestBody.lastName && requestBody.lastName !== oldPost.lastName) updatedObject.lastName = requestBody.lastName;
+        if (requestBody.email && requestBody.email !== oldPost.email) updatedObject.email = requestBody.email;
+        if (requestBody.city && requestBody.city !== oldPost.city)
+            updatedObject.city = requestBody.city;
+        if (requestBody.state && requestBody.state !== oldPost.state)
+            updatedObject.state = requestBody.state;
+    } catch (e) {
+        res.status(404).json({ error: 'User not found to modify the record' });
+        return;
+    }
+
+    try {
+        const updatedUser = await usersData.updateUser(req.session.user, requestBody.firstName, requestBody.lastName, requestBody.email, requestBody.city, requestBody.state);
+        res.render('grievances/UserUpdateSuccessful', { newUser: updatedUser })
+        // res.json(updatedUser);
+    } catch (e) {
+        res.status(500).json({ error: e });
+    }
+});
+
 
 module.exports = router;

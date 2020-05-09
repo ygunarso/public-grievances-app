@@ -3,7 +3,7 @@ const issues = mongoCollections.issues;
 const usersCol = mongoCollections.users;
 const users = require('./users');
 const { ObjectId } = require('mongodb');
-const uuid = require('uuid');
+//const uuid = require('uuid');
 
 let exportedMethods = {
     async getAllIssues() {
@@ -23,10 +23,10 @@ let exportedMethods = {
     async getIssueById(id) {
         id = ObjectId(id);
         const issueCollection = await issues();
-        const issue = await issueCollection.findOne({_id: id});
+        const issue = await issueCollection.findOne({ _id: id });
         return issue;
     },
-    async addIssue(name, category, date, latitude, longitude, city, state, userID) {
+    async addIssue(name, category, date, latitude, longitude, city, state, userID) { // user
         if (!name) throw 'Issue name missing.';
         if (!category) throw 'Category missing.';
         if (!date) throw 'Date missing.';
@@ -38,7 +38,7 @@ let exportedMethods = {
 
         const issueCollection = await issues();
         const userCollection = await usersCol();
-        const user = await userCollection.findOne({ email: userID });
+        const user = await userCollection.findOne({ email: userID }); //user
         let newIssue = {
             name: name,
             category: category,
@@ -55,32 +55,32 @@ let exportedMethods = {
         const issueInfo = await issueCollection.insertOne(newIssue);
         if (issueInfo.insertedCount === 0) throw 'Could not add issue';
         const id = issueInfo.insertedId;
-        await users.addIssueToUser(user._id,newIssue)
+        await users.addIssueToUser(user._id, newIssue)
         const issue = await this.getIssueById(id);
         return issue;
     },
     async getIssuesByCategory(category) {
         const issueCollection = await issues();
         const issueList = await issueCollection.find({ category: category })
-                                .sort({ date: -1 }).toArray();
+            .sort({ date: -1 }).toArray();
         return issueList;
     },
     async getIssuesByCity(city) {
         const issueCollection = await issues();
         const issueList = await issueCollection.find({ city: city })
-                                .sort({ date: -1 }).toArray();
+            .sort({ date: -1 }).toArray();
         return issueList;
     },
     async getIssuesByState(state) {
         const issueCollection = await issues();
         const issueList = await issueCollection.find({ state: state })
-                                .sort({ date: -1 }).toArray();
+            .sort({ date: -1 }).toArray();
         return issueList;
     },
     async getIssuesByStatus(status) {
         const issueCollection = await issues();
         const issueList = await issueCollection.find({ status: status })
-                                .sort({ date: -1 }).toArray();
+            .sort({ date: -1 }).toArray();
         return issueList;
     },
     async removeIssue(id) {
@@ -90,20 +90,20 @@ let exportedMethods = {
         const issue = await this.getIssueById(id);
         const deletionInfo = await issueCollection.removeOne({ _id: id });
         if (deletionInfo.deletedCount === 0) {
-          throw "Could not delete issue";
+            throw "Could not delete issue";
         }
         return true;
-    // },
-    // async closeIssue(id) {
-    //
-    // },
-    // async openIssue(id) {
-    //
-    // },
-    // async updateIssue(id) {
-    //
-    // },
-    // async addComment(name, comment) {
+        // },
+        // async closeIssue(id) {
+        //
+        // },
+        // async openIssue(id) {
+        //
+        // },
+        // async updateIssue(id) {
+        //
+        // },
+        // async addComment(name, comment) {
 
     },
     async getAllComments(issueId) {
@@ -121,7 +121,7 @@ let exportedMethods = {
 
         issueId = ObjectId(issueId);
 
-        const updatedInfo = await issueCollection.updateOne({ _id: issueId }, {$addToSet: {comments: comment}});
+        const updatedInfo = await issueCollection.updateOne({ _id: issueId }, { $addToSet: { comments: comment } });
         if (updatedInfo.modifiedCount === 0) {
             throw 'Could not add comment.';
         }

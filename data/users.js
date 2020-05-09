@@ -20,6 +20,15 @@ let exportedMethods = {
     const user = await userCollection.findOne({ _id: id });
     return user
   },
+
+  // used in Editing the user profile
+  async getUserByEmail(email) {
+
+    const userCollection = await users();
+    const user = await userCollection.findOne({ email: email });
+    return user;
+  },
+
   async addUser(firstName, lastName, email, hashedPassword, city, state) {
     const userCollection = await users();
     let newUser = {
@@ -36,7 +45,7 @@ let exportedMethods = {
     if (newInsertInformation.insertedCount === 0) throw 'Insert failed!';
     return await this.getUserById(newInsertInformation.insertedId);
   },
-  async updateUser(userId, firstName, lastName, email, city,
+  async updateUser(user, firstName, lastName, emailu, city,
     state) {
 
     const userCollection = await users();
@@ -48,8 +57,8 @@ let exportedMethods = {
     if (lastName) {
       updatedUserData.lastName = lastName;
     }
-    if (email) {
-      updatedUserData.email = email;
+    if (emailu) {
+      updatedUserData.email = emailu;
     }
     if (city) {
       updatedUserData.city = city;
@@ -58,15 +67,15 @@ let exportedMethods = {
       updatedUserData.state = state;
     }
 
-    const updatedInfo = await userCollection.updateOne({ _id: ObjectId(userId) }, { $set: updatedUserData });
+    const updatedInfo = await userCollection.updateOne({ email: user }, { $set: updatedUserData });
     if (updatedInfo.modifiedCount === 0) {
       throw 'could not update the user successfully';
     }
 
-    return await this.getUserById(userId);
+    return await this.getUserByEmail(user);
 
   },
-  async addIssueToUser(userId,newIssue){
+  async addIssueToUser(userId, newIssue) {
     let currentUser = await this.getUserById(userId);
     const userCollection = await users();
     const updateInfo = await userCollection.updateOne(
