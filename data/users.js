@@ -66,7 +66,17 @@ let exportedMethods = {
     return await this.getUserById(userId);
 
   },
-
+  async addIssueToUser(userId,newIssue){
+    let currentUser = await this.getUserById(userId);
+    const userCollection = await users();
+    const updateInfo = await userCollection.updateOne(
+      { _id: userId },
+      { $addToSet: { issues: { id: newIssue._id } } }
+    );
+    if (!updateInfo.matchedCount && !updateInfo.modifiedCount)
+      throw 'Update failed';
+    return await this.getUserById(userId);
+  },
   async removeUser(id) { // same as pdf
     const userCollection = await users();
 
