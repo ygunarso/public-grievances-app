@@ -6,12 +6,16 @@ const { ObjectId } = require('mongodb');
 
 router.get('/createIssue', async (req, res) => {
     try {
-        res.render('grievances/CreateIssue');
+        if(req.session.user === undefined){
+            res.render('grievances/login', {message: "You must login first!"});
+        } else {
+            res.render('grievances/createIssue');
+        }
     } catch (error) {
         res.status(401).json({ error: "Page Not Found" });
     }
-
 });
+
 router.get('/:id', async (req, res) => {
 	try {
 		let issue = await issuesData.getIssueById(req.params.id);
@@ -41,6 +45,19 @@ router.get('/', async (req, res) => {
 	try {
 		let issueList = await issuesData.getAllIssues();
 		res.render('grievances/issue',{issueList:issueList});
+	} catch (e) {
+		res.sendStatus(400);
+	}
+});
+
+router.post('/comment/:id', async (req, res) => {
+    try {
+        if (!req.body.content) {
+            console.log("No content typed");
+        } else {
+            await issuesData.addComment(req.session.user, req.body.content, req.params.id);
+        }
+		res.redirect("/issues");
 	} catch (e) {
 		res.sendStatus(400);
 	}
@@ -87,7 +104,7 @@ router.post('/createIssue', async (req, res) => {
 			res.status(400).json({ error: 'You must provide state' });
 			return;
 	}
-	
+
 	try {
 		const newIssue = await issuesData.addIssue(issueInfo.name, issueInfo.category,
 						issueInfo.date, issueInfo.latitude, issueInfo.longitude,

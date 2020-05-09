@@ -8,13 +8,6 @@ const constructorMethod = app => {
   app.use("/users", usersRoutes)
   app.use("/", outRoutes)
 
-  // app.use("/signup", (req, res) => {
-  //   res.render('grievances/signup');
-  // });
-  // app.use("/login", (req, res) => {
-  //   res.render('grievances/login');
-  // });
-
   // app.post('/test', async (req, res) => {
   //   try{
   //       let data = req.body;

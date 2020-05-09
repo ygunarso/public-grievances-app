@@ -3,6 +3,7 @@ const issues = mongoCollections.issues;
 const usersCol = mongoCollections.users;
 const users = require('./users');
 const { ObjectId } = require('mongodb');
+const uuid = require('uuid');
 
 let exportedMethods = {
     async getAllIssues() {
@@ -104,6 +105,28 @@ let exportedMethods = {
     // },
     // async addComment(name, comment) {
 
+    },
+    async getAllComments(issueId) {
+        const issue = await this.getIssueById(issueId);
+        return issue.comments;
+    },
+    async addComment(name, content, issueId) {
+        const issueCollection = await issues();
+
+        const comment = {
+            _id: uuid.v4(),
+            name: name,
+            content: content
+        };
+
+        issueId = ObjectId(issueId);
+
+        const updatedInfo = await issueCollection.updateOne({ _id: issueId }, {$addToSet: {comments: comment}});
+        if (updatedInfo.modifiedCount === 0) {
+            throw 'Could not add comment.';
+        }
+
+        return comment;
     }
 };
 

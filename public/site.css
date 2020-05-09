@@ -8,3 +8,13 @@ h1 {
     font-size: 50pt;
     color: black;
 }
+
+#map {
+  height: 300px;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}

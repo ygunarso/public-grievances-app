@@ -26,7 +26,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }))
-app.use('/public', static);
+app.use(static);
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 

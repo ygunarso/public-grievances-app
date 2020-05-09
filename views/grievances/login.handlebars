@@ -1,9 +1,10 @@
 <section>
     {{#if message}}
     <div>
-        <p style="color:red">WRONG PASSWORD</p>
+        <p style="color:red">{{message}}</p>
     </div>
     {{/if}}
+    <p>{{msg}}</p>
     <form id="login-form" method="POST" action="/login">
         <label>Email</label>
         <input type="email" id="email" name="email" placeholder="Enter Email">
