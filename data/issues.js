@@ -1,5 +1,6 @@
 const mongoCollections = require('../config/mongoCollections');
 const issues = mongoCollections.issues;
+const usersCol = mongoCollections.users;
 const users = require('./users');
 const { ObjectId } = require('mongodb');
 
@@ -35,6 +36,8 @@ let exportedMethods = {
         if (!userID) throw 'User ID missing.';
 
         const issueCollection = await issues();
+        const userCollection = await usersCol();
+        const user = await userCollection.findOne({ email: userID });
         let newIssue = {
             name: name,
             category: category,
@@ -45,7 +48,7 @@ let exportedMethods = {
             city: city,
             state: state,
             status: "open",
-            userID: userID,
+            userID: user._id,
             comments: []
         };
         const issueInfo = await issueCollection.insertOne(newIssue);

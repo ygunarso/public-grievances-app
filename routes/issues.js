@@ -4,6 +4,14 @@ const data = require('../data');
 const issuesData = data.issues;
 const { ObjectId } = require('mongodb');
 
+router.get('/createIssue', async (req, res) => {
+    try {
+        res.render('grievances/CreateIssue');
+    } catch (error) {
+        res.status(401).json({ error: "Page Not Found" });
+    }
+
+});
 router.get('/:id', async (req, res) => {
 	try {
 		let issue = await issuesData.getIssueById(req.params.id);
@@ -38,8 +46,15 @@ router.get('/', async (req, res) => {
 	}
 });
 
-router.post('/', async (req, res) => {
+router.post('/createIssue', async (req, res) => {
 	let issueInfo = req.body;
+	if(req.session.user === undefined){
+		res.status(400).json({ error: 'You must provide user ID' });
+		return;
+	}
+	else{
+		issueInfo.userID = req.session.user
+	}
 	if (!issueInfo) {
 		res.status(400).json({ error: 'You must provide data to create a user' });
 		return;
@@ -72,19 +87,15 @@ router.post('/', async (req, res) => {
 			res.status(400).json({ error: 'You must provide state' });
 			return;
 	}
-	if (!issueInfo.userID) {
-			res.status(400).json({ error: 'You must provide user ID' });
-			return;
-	}
+	
 	try {
 		const newIssue = await issuesData.addIssue(issueInfo.name, issueInfo.category,
 						issueInfo.date, issueInfo.latitude, issueInfo.longitude,
 						issueInfo.city, issueInfo.state, issueInfo.userID);
 
         //req.session.issue = newUser.email
-
-        req.session.AuthCookie = req.sessionID;
-        let sessionInfo = req.session.issue;
+		//req.session.AuthCookie = req.sessionID;
+        let sessionInfo = req.session.user;
 		const issueList = [newIssue];
 		res.render('grievances/issue',{issueList:issueList,sessionInfo:sessionInfo});
 	} catch (e) {

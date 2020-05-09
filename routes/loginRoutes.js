@@ -84,7 +84,7 @@ router.post('/login', async (req, res) => {
         let user_auth = await usersData.logInUser(login_form_parameters.email, login_form_parameters.password);
         //here hashpassword is actually password entered by the user!! It is not hashed
         if (user_auth != -1) {
-            req.session.userId = login_form_parameters.email;
+            req.session.user = login_form_parameters.email;
             req.session.AuthCookie = req.sessionID; // alis for req.session.id;
             return res.status(201).redirect("userhome");
         } else {
