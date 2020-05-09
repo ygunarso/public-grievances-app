@@ -93,19 +93,35 @@ let exportedMethods = {
             throw "Could not delete issue";
         }
         return true;
-        // },
-        // async closeIssue(id) {
-        //
-        // },
-        // async openIssue(id) {
-        //
-        // },
-        // async updateIssue(id) {
-        //
-        // },
-        // async addComment(name, comment) {
-
     },
+
+    // DElete all the issues related to a specific user!
+    async removeAllIssue(id) {
+        if (!id) throw 'Issue ID missing';
+        const issueCollection = await issues();
+
+        //const issue = await this.getIssueById(id);
+        const deletionInfo = await issueCollection.remove({ userID: id }); // This will remove all the issues related to a specific USER when he deletes the account in issue collection
+        if (deletionInfo.deletedCount === 0) {
+            console.log("deleted all the issues");
+            return true
+            //throw "Could not delete issue";
+        }
+        return true;
+    },
+    // },
+    // async closeIssue(id) {
+    //
+    // },
+    // async openIssue(id) {
+    //
+    // },
+    // async updateIssue(id) {
+    //
+    // },
+    // async addComment(name, comment) {
+
+
     async getAllComments(issueId) {
         const issue = await this.getIssueById(issueId);
         return issue.comments;

@@ -86,17 +86,30 @@ let exportedMethods = {
       throw 'Update failed';
     return await this.getUserById(userId);
   },
-  async removeUser(id) { // same as pdf
-    const userCollection = await users();
 
+  // Delete User
+
+  async removeUser(user) {
+    const userCollection = await users();
+    const issueCollection = await issues();
     let userdel = null;
+
     try {
-      userdel = await this.getUserById(id);
+      userdel = await this.getUserByEmail(user);
     } catch (e) {
       console.log(e);
       return;
     }
-    const deletionInfo = await userCollection.removeOne({ _id: ObjectId(id) });
+    try {
+      const deletionInfo = await issueCollection.remove({ userID: userdel._id }); // This will remove all the issues related to a specific USER when he deletes the account in issue collection
+      if (deletionInfo.deletedCount === 0) {
+        console.log("COULD NOT DELETE");
+      }
+    } catch (e) {
+      console.log(e);
+    }
+
+    const deletionInfo = await userCollection.removeOne({ email: user });
     if (deletionInfo.deletedCount === 0) {
       throw "Could not delete the User";
     }
@@ -104,6 +117,9 @@ let exportedMethods = {
     return true;
 
   },
+
+
+  // User Login
 
   async logInUser(email, password) {
     const userCollection = await users();
@@ -124,21 +140,10 @@ let exportedMethods = {
 
   }
 };
+
+
 module.exports = exportedMethods;
-//   async loggingTheUser(email, password) {
-  //     const userCollection = await userData();
-  //     const userDataPresent = await userCollection.findOne({ email: email });
-  //     if (userDataPresent != null && userDataPresent.email === email) {
-  //         let passCheck = await bcrypt.compare(password, userDataPresent.password);
-  //         if (passCheck) {
-  //             return userDataPresent._id;
-  //         } else {
-  //             return -1;
-  //         }
-  //     } else {
-  //         return -1;
-  //     }
-  // },
+
 
 
 
