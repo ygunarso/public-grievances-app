@@ -1,0 +1,8 @@
+<p>{{sessionInfo}}</p>
+
+<p>Inside View All My Issues</p>
+{{#each issueList}}
+    {{#each this.issues}}
+        <p>{{this.id}}</p>
+    {{/each}}
+{{/each}}

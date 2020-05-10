@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const data = require('../data');
 const usersData = data.users;
+const issuesData = data.issues;
 
 router.get('/', async (req, res) => {
     try {
@@ -163,6 +164,19 @@ router.post('/profileupdate', async (req, res) => {
     } catch (e) {
         res.status(500).json({ error: e });
     }
+});
+
+router.get('/ViewAllMyIssues', async (req, res) => {
+    try {
+        const newUser = await usersData.getUserByEmail(req.session.user); //userId?
+        let sessionInfo = req.session.user
+        const issueByUserId = await issuesData.getIssuesByUserId(newUser._id)
+        const issueList = [issueByUserId];
+        res.render('grievances/ViewAllMyIssues', {issueList:issueList,sessionInfo: sessionInfo })
+    } catch (e) {
+        res.render('grievances/error', { title: "error", message: e })
+    }
+
 });
 
 

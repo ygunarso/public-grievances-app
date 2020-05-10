@@ -1,0 +1,25 @@
+{{#each issueList}}
+    <p><label>Name</label> : {{this.name}}</p>
+    <p><label>Category</label> : {{this.category}}</p>
+    <p><label>Date</label>: {{this.date}}</p>
+    <p><label>Latitude</label>: {{this.latitude}}</p>
+    <p><label>Longitude</label>: {{this.longitude}}</p>
+    <p><label>City</label>: {{this.city}}</p>
+    <p><label>State</label> : {{this.state}}</p>
+    <p>Comments:</p>
+    {{#each this.comments}}
+        <p><label>{{this.name}}</label> : {{this.content}}</p>
+    {{/each}}
+    <form method="POST" action="/issues/comment/{{this._id}}">
+        <textarea name="content" cols="40" rows="5"></textarea>
+        <button type="submit">Comment</button>
+    </form>
+    <br>
+    {{!-- <form method="POST" action="/issues/comment/{{this._id}}">
+        <textarea name="content" cols="40" rows="5"></textarea>
+        <button type="submit">Comment</button>
+    </form> --}}
+    {{!-- <a href="/updateIssue/{{this._id}}"></a> --}}
+    <br>
+    
+{{/each}}

@@ -57,8 +57,9 @@ router.post('/comment/:id', async (req, res) => {
             console.log("No content typed");
         } else {
             await issuesData.addComment(req.session.user, req.body.content, req.params.id);
-        }
-		res.redirect("/issues");
+		}
+		let issueid = req.params.id
+		res.redirect('/issues/'+issueid);
 	} catch (e) {
 		res.sendStatus(400);
 	}
