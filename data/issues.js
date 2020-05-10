@@ -85,6 +85,41 @@ let exportedMethods = {
             .sort({ date: -1 }).toArray();
         return issueList;
     },
+    async updateIssue(issueId, name, category, date, latitude,longitude,city,state) {
+        issueId = ObjectId(issueId)
+        const issueCollection = await issues();
+        const updatedIssueData = {};
+    
+        if (name) {
+            updatedIssueData.name = name;
+        }
+        if (category) {
+            updatedIssueData.category = category;
+        }
+        if (date) {
+            updatedIssueData.date = date;
+        }
+        if (latitude) {
+            updatedIssueData.latitude = latitude;
+        }
+        if (longitude) {
+            updatedIssueData.longitude = longitude;
+        }
+        if (city) {
+            updatedIssueData.city = city;
+        }
+        if (state) {
+            updatedIssueData.state = state;
+        }
+    
+        const updatedInfo = await issueCollection.updateOne({ _id: issueId }, { $set: updatedIssueData });
+        if (updatedInfo.modifiedCount === 0) {
+          throw 'could not update the user successfully';
+        }
+    
+        return await this.getIssueById(issueId)
+    
+    },
     async removeIssue(id) {
         if (!id) throw 'Issue ID missing';
         const issueCollection = await issues();

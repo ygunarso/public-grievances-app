@@ -6,7 +6,7 @@ const issuesData = data.issues;
 
 router.get('/', async (req, res) => {
     try {
-        if (req.session.userId) {
+        if (req.session.user) {
             res.redirect('userhome');
         } else {
             res.render('grievances/index');
@@ -167,16 +167,65 @@ router.post('/profileupdate', async (req, res) => {
     }
 });
 
+//view all my issues
 router.get('/ViewAllMyIssues', async (req, res) => {
     try {
         const newUser = await usersData.getUserByEmail(req.session.user); //userId?
         let sessionInfo = req.session.user
         const issueByUserId = await issuesData.getIssuesByUserId(newUser._id)
-        res.render('grievances/ViewAllMyIssues', { issueByUserId: issueByUserId, sessionInfo: sessionInfo })
+        res.render('grievances/ViewAllMyIssues', {issueByUserId:issueByUserId,sessionInfo: sessionInfo })
     } catch (e) {
-        res.render('grievances/error', { title: "error", message: "No issues found" })
+        res.render('grievances/error', { title: "error", message: "No issues found"})
     }
 
+});
+
+//update issues
+router.get('/issueUpdate/:id', async (req, res) => {
+    try {
+        if(req.session.user === undefined){
+            return res.render('grievances/error', { title: "error", message: "User Not Logged In"})
+        }
+        const issue = await issuesData.getIssueById(req.params.id)
+        res.render('grievances/issueUpdate',{issue:issue})
+        // const newUser = await usersData.getUserByEmail(req.session.user);
+        // res.render('grievances/profileupdate', { newUser: newUser })
+    } catch (e) {
+        res.render('grievances/error', { title: "error", message: e })
+    }
+});
+
+router.post('/issueUpdate/:id', async (req, res) => {
+    if(req.session.user === undefined){
+        return res.render('grievances/error', { title: "error", message: "User Not Logged In"})
+    }
+    const requestBody = req.body;
+    let updatedObject = {};
+    try {
+        const oldIssue = await issuesData.getIssueById(req.params.id)
+        if (requestBody.name && requestBody.name !== oldIssue.name) updatedObject.name = requestBody.name;
+        if (requestBody.category && requestBody.category !== oldIssue.category) updatedObject.category = requestBody.category;
+        if (requestBody.date && requestBody.date !== oldIssue.date) updatedObject.date = requestBody.date;
+        if (requestBody.latitude && requestBody.latitude !== oldIssue.latitude) updatedObject.latitude = requestBody.latitude;
+        if (requestBody.longitude && requestBody.longitude !== oldIssue.longitude) updatedObject.longitude = requestBody.longitude;
+        if (requestBody.city && requestBody.city !== oldIssue.city)
+            updatedObject.city = requestBody.city;
+        if (requestBody.state && requestBody.state !== oldIssue.state)
+            updatedObject.state = requestBody.state;
+    } catch (e) {
+        res.status(404).json({ error: 'Issue not found to modify the record' });
+        return;
+    }
+
+    try {
+        const updatedIssue = await issuesData.updateIssue(req.params.id,requestBody.name,requestBody.category,requestBody.date,requestBody.latitude,requestBody.longitude,requestBody.city,requestBody.state)
+        let sessionInfo = req.session.user;
+		const issueList = [updatedIssue];
+        res.render('grievances/issueUpdateSuccessful', { issueList:issueList,sessionInfo:sessionInfo})
+        // res.json(updatedUser);
+    } catch (e) {
+        res.status(500).json({ error: e });
+    }
 });
 
 

@@ -1,7 +1,6 @@
+<p>Suceesful Update of Issues</p>
 <p>{{sessionInfo}}</p>
-
-<p>Inside View All My Issues</p>
-{{#each issueByUserId}}
+{{#each issueList}}
     <p><label>Name</label> : {{this.name}}</p>
     <p><label>Category</label> : {{this.category}}</p>
     <p><label>Date</label>: {{this.date}}</p>
@@ -9,12 +8,9 @@
     <p><label>Longitude</label>: {{this.longitude}}</p>
     <p><label>City</label>: {{this.city}}</p>
     <p><label>State</label> : {{this.state}}</p>
-    <p><label>Status</label> : {{this.status}}</p>
-    <p><label>Likes</label> : {{this.likes}}</p>
     <p>Comments:</p>
     {{#each this.comments}}
         <p><label>{{this.name}}</label> : {{this.content}}</p>
     {{/each}}
-    <a href="/issueUpdate/{{this._id}}"> Update Your Issue</a>
-    <br>
 {{/each}}
+<a href="/userhome"> Go To Home Page</a>
