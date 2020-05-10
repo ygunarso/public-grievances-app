@@ -1,8 +1,18 @@
 <p>{{sessionInfo}}</p>
 
 <p>Inside View All My Issues</p>
-{{#each issueList}}
-    {{#each this.issues}}
-        <p>{{this.id}}</p>
+{{#each issueByUserId}}
+    <p><label>Name</label> : {{this.name}}</p>
+    <p><label>Category</label> : {{this.category}}</p>
+    <p><label>Date</label>: {{this.date}}</p>
+    <p><label>Latitude</label>: {{this.latitude}}</p>
+    <p><label>Longitude</label>: {{this.longitude}}</p>
+    <p><label>City</label>: {{this.city}}</p>
+    <p><label>State</label> : {{this.state}}</p>
+    <p><label>Status</label> : {{this.status}}</p>
+    <p>Comments:</p>
+    {{#each this.comments}}
+        <p><label>{{this.name}}</label> : {{this.content}}</p>
     {{/each}}
+    <br>
 {{/each}}
