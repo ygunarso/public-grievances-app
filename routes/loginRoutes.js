@@ -171,10 +171,9 @@ router.get('/ViewAllMyIssues', async (req, res) => {
         const newUser = await usersData.getUserByEmail(req.session.user); //userId?
         let sessionInfo = req.session.user
         const issueByUserId = await issuesData.getIssuesByUserId(newUser._id)
-        const issueList = [issueByUserId];
-        res.render('grievances/ViewAllMyIssues', {issueList:issueList,sessionInfo: sessionInfo })
+        res.render('grievances/ViewAllMyIssues', {issueByUserId:issueByUserId,sessionInfo: sessionInfo })
     } catch (e) {
-        res.render('grievances/error', { title: "error", message: e })
+        res.render('grievances/error', { title: "error", message: "No issues found"})
     }
 
 });
