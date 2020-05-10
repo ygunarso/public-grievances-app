@@ -12,10 +12,12 @@ let exportedMethods = {
         return issueList;
     },
     async getIssuesByUserId(userID) {
-        const issues = users.getUserById(userID).issues;
-        const issueCollection = await issues();
+        const user = await users.getUserById(userID);
+        const issues = user.issues;
+        let issueList = [];
         for (let issue of issues) {
-            issue = this.getIssueById(issue);
+            let insertedIssue = await this.getIssueById(issue._id);
+            issueList.push(insertedIssue);
         }
         if (!issueList) throw 'User has no issues!';
         return issueList;

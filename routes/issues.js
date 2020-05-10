@@ -30,9 +30,9 @@ router.get('/:id', async (req, res) => {
 	}
 });
 
-router.get('/:userid', async (req, res) => {
+router.get('/user/:id', async (req, res) => {
 	try {
-		let issueList = await issuesData.getIssuesByUserId(req.params.userid);
+		let issueList = await issuesData.getIssuesByUserId(req.params.id);
 		if(issueList === null || issueList === undefined)
 			res.status(404).json({ error: 'No issue found' })
 		else
