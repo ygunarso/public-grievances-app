@@ -3,6 +3,7 @@ const router = express.Router();
 const data = require('../data');
 const issuesData = data.issues;
 const { ObjectId } = require('mongodb');
+const file = require('../public/file.js')
 
 router.get('/createIssue', async (req, res) => {
     try {
@@ -133,6 +134,15 @@ router.post('/createIssue', async (req, res) => {
         let sessionInfo = req.session.user;
 		const issueList = [newIssue];
 		res.render('grievances/issue',{issueList:issueList,sessionInfo:sessionInfo});
+	} catch (e) {
+		res.sendStatus(400);
+	}
+});
+
+router.post('/download', async (req, res) => {
+    try {
+        file.downloadFile();
+		res.redirect("/issues");
 	} catch (e) {
 		res.sendStatus(400);
 	}

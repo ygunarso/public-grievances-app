@@ -1,3 +1,5 @@
+<h2>Create an Issue</h2>
+
 <div id="map"></div>
 <script>
 
@@ -14,16 +16,37 @@
     });
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
-          var pos = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-        document.getElementById("latitude").value = pos.lat;
-        document.getElementById("longitude").value = pos.lng;
-        map.setCenter(pos);
-        marker.setPosition(pos)
-        })
+            var pos = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
+            document.getElementById("latitude").value = pos.lat;
+            document.getElementById("longitude").value = pos.lng;
+            var geocoder = new google.maps.Geocoder;
+            geocoder.geocode({'location': pos}, function(results, status) {
+                if (status == 'OK') {
+                    if (results[0]) {
+                        const addr = results[0].address_components;
+                        const city = addr.find(obj => JSON.stringify(obj.types) == JSON.stringify(["locality", "political"]));
+                        const state = addr.find(obj => JSON.stringify(obj.types) == JSON.stringify(["administrative_area_level_1", "political"]));
+                        document.getElementById("city").value = city.short_name;
+                        document.getElementById("state").value = state.long_name;
+                        document.getElementById("select").value = state.short_name;
+
+                    }
+                }
+            });
+            map.setCenter(pos);
+            marker.setPosition(pos);
+            var date = new Date();
+            var formatted_date = date.getFullYear().toString() + '-' +
+                                (date.getMonth() + 1).toString().padStart(2, 0) +
+                                '-' + date.getDate().toString().padStart(2, 0);
+            document.getElementById("date").value = formatted_date;
+            document.getElementById("date").max = formatted_date;
+        });
     }
+
     marker = new google.maps.Marker({
       map: map,
       draggable: true,
@@ -43,18 +66,18 @@
       var lng = marker.getPosition().lng();
       document.getElementById("latitude").value = lat;
       document.getElementById("longitude").value = lng;
-
     }
 
 </script>
 <script async defer
 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDs-DaFuYDPJ1ThmZywl6Ve2AMTB03iSGI&callback=initMap">
 </script>
+<p id="test"></p>
 <form method="POST" action="createIssue">
     <br>
     <br>
     <label>Issue Name </label>
-    <input type="text" id="name" name="name">
+    <input type="text" id="name" name="name" required>
     <br>
     <br>
     <label>Issue Category </label>
@@ -65,24 +88,25 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDs-DaFuYDPJ1ThmZywl6Ve2AM
     </select>
     <br>
     <br>
-    <label for="date">Issue date:</label>
-    <input type="date" id="date" name="date" value="2020-05-08" min="1990-01-01" max="2030-12-31">
+    <label for="date">Issue Date:</label>
+    <input type="date" id="date" name="date" min="1990-01-01" readonly>
     <br>
     <br>
     <label>Latitude </label>
-    <input type="text" id="latitude" name="latitude">
+    <input type="text" id="latitude" name="latitude" readonly>
     <br>
     <br>
     <label>Longitude </label>
-    <input type="text" id="longitude" name="longitude">
+    <input type="text" id="longitude" name="longitude" readonly>
     <br>
     <br>
     <label>City </label>
-    <input type="text" id="city" name="city">
+    <input type="text" id="city" name="city" readonly>
     <br>
     <br>
     <label for="state">Choose a State:</label>
-    <select id="state" name="state">
+    <input type="hidden" id="state" name="state">
+    <select id="select" name="select" disabled="true">
         <option value="AL">Alabama</option>
         <option value="AK">Alaska</option>
         <option value="AZ">Arizona</option>

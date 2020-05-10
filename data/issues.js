@@ -3,7 +3,7 @@ const issues = mongoCollections.issues;
 const usersCol = mongoCollections.users;
 const users = require('./users');
 const { ObjectId } = require('mongodb');
-//const uuid = require('uuid');
+const uuid = require('node-uuid');
 
 let exportedMethods = {
     async getAllIssues() {

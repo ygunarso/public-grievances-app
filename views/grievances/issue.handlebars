@@ -1,5 +1,9 @@
-<h1>Issue Page</h1>
+<h2>Issue Page</h2>
 <p>{{sessionInfo}}</p>
+
+<form method="POST" action="/issues/download">
+        <button type="submit">Download All Issues</button>
+</form>
 
 {{#each issueList}}
     <p><label>Name</label> : {{this.name}}</p>

@@ -1,0 +1,75 @@
+[
+  {
+    "_id": "5eb4d640f42fab53ef85fca7",
+    "name": "garbage dump",
+    "category": "dump",
+    "date": "date",
+    "likes": 0,
+    "latitude": "latitude",
+    "longitude": "longitude",
+    "city": "city",
+    "state": "state",
+    "status": "closed",
+    "userID": "userID",
+    "comments": [
+      {
+        "_id": "8f25b36a-e5a2-4eda-bacf-a0475e8e65d9",
+        "userID": "userID",
+        "content": "Hello"
+      },
+      {
+        "_id": "2e2fecca-bfab-41cf-bc84-87eed6689a7a",
+        "userID": "userID",
+        "content": "Hello2"
+      },
+      {
+        "_id": "46a52f57-5401-4ff2-bed3-b95880ac8df0",
+        "name": null,
+        "content": "sadfa"
+      },
+      {
+        "_id": "1c8413b2-60a4-486d-8d04-630bf041025f",
+        "name": null,
+        "content": "dsafa"
+      },
+      {
+        "_id": "fcbdac30-edd6-4145-964e-8a0d27428cd0",
+        "name": null,
+        "content": "sadfsa"
+      },
+      {
+        "_id": "40b48e93-d9d4-4c3d-a02f-832642feb903",
+        "name": null,
+        "content": "dsafas"
+      }
+    ]
+  },
+  {
+    "_id": "5eb4d7f031155755f6b6f649",
+    "name": "test dump",
+    "category": "dump",
+    "date": "date",
+    "likes": 0,
+    "latitude": "latitude",
+    "longitude": "longitude",
+    "city": "city",
+    "state": "state",
+    "status": "closed",
+    "userID": "userID",
+    "comments": []
+  },
+  {
+    "_id": "5eb63c8a5111c41e7ed8fd7f",
+    "name": "Dump",
+    "category": "Garbage Dump",
+    "date": "2020-05-08",
+    "likes": 0,
+    "latitude": "34.1427587",
+    "longitude": "-118.13860050000001",
+    "city": "Pasadena",
+    "state": "CA",
+    "status": "open",
+    "userID": "5eb63aee80070b1cdc9e3199",
+    "comments": []
+  }
+]
