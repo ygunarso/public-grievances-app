@@ -31,6 +31,14 @@ let exportedMethods = {
 
   async addUser(firstName, lastName, email, hashedPassword, city, state) {
     const userCollection = await users();
+
+    email = email.toLowerCase(); // stored in lower case to check if user exists already
+    let checkemail = await userCollection.find({ email: email }).toArray(); // to check if email already taken
+    if (checkemail.length != 0) {
+      throw "The User with this email already exits! Try different email."
+    }
+    hashedPassword = await bcrypt.hash(hashedPassword, 10); // hashpassword is passed by the user while sign up. salt rounds =10.
+
     let newUser = {
       firstName: firstName,
       lastName: lastName,
@@ -134,11 +142,12 @@ let exportedMethods = {
 
   async logInUser(email, password) {
     const userCollection = await users();
+    email = email.toLowerCase();
     const database_record = await userCollection.findOne({ email: email });
 
     if (database_record) {
-      //let password_verification = await bcrypt.compare(password, database_record.password);
-      if (password == database_record.hashedPassword) {
+      let password_verification = await bcrypt.compare(password, database_record.hashedPassword);
+      if (password_verification) { // password == database_record.hashedPassword
         return database_record._id;
       } else {
         return -1;

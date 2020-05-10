@@ -71,9 +71,10 @@ router.post('/signup', async (req, res) => {
         req.session.user = newUser.email
         req.session.AuthCookie = req.sessionID;
         let sessionInfo = req.session.user
-        res.render('grievances/profile', { newUser: newUser, sessionInfo: sessionInfo });
+        return res.status(201).redirect("userhome");
+        //res.render('grievances/profile', { newUser: newUser, sessionInfo: sessionInfo });
     } catch (e) {
-        res.sendStatus(400);
+        res.render('grievances/error', { title: "Error", message: e });
     }
 
 });
@@ -171,9 +172,9 @@ router.get('/ViewAllMyIssues', async (req, res) => {
         const newUser = await usersData.getUserByEmail(req.session.user); //userId?
         let sessionInfo = req.session.user
         const issueByUserId = await issuesData.getIssuesByUserId(newUser._id)
-        res.render('grievances/ViewAllMyIssues', {issueByUserId:issueByUserId,sessionInfo: sessionInfo })
+        res.render('grievances/ViewAllMyIssues', { issueByUserId: issueByUserId, sessionInfo: sessionInfo })
     } catch (e) {
-        res.render('grievances/error', { title: "error", message: "No issues found"})
+        res.render('grievances/error', { title: "error", message: "No issues found" })
     }
 
 });
