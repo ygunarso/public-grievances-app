@@ -133,11 +133,26 @@ let exportedMethods = {
         }
         return await this.getIssueById(id);
     },
-    // async updateIssue(id) {
-    //
-    // },
-    // async addComment(name, comment) {
-
+    async likeIssue(id) {
+        if (!id) throw 'Issue ID missing';
+        const issueCollection = await issues();
+        id = ObjectId(id);
+        const updatedInfo = await issueCollection.updateOne({ _id: id }, {$inc: { likes: 1 }});
+        if (updatedInfo.modifiedCount === 0) {
+          throw 'could not like issue successfully';
+        }
+        return await this.getIssueById(id);
+    },
+    async unlikeIssue(id) {
+        if (!id) throw 'Issue ID missing';
+        const issueCollection = await issues();
+        id = ObjectId(id);
+        const updatedInfo = await issueCollection.updateOne({ _id: id }, {$inc: { likes: -1 }});
+        if (updatedInfo.modifiedCount === 0) {
+          throw 'could not unlike issue successfully';
+        }
+        return await this.getIssueById(id);
+    },
 
     async getAllComments(issueId) {
         const issue = await this.getIssueById(issueId);

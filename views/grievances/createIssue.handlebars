@@ -23,19 +23,8 @@
             document.getElementById("latitude").value = pos.lat;
             document.getElementById("longitude").value = pos.lng;
             var geocoder = new google.maps.Geocoder;
-            geocoder.geocode({'location': pos}, function(results, status) {
-                if (status == 'OK') {
-                    if (results[0]) {
-                        const addr = results[0].address_components;
-                        const city = addr.find(obj => JSON.stringify(obj.types) == JSON.stringify(["locality", "political"]));
-                        const state = addr.find(obj => JSON.stringify(obj.types) == JSON.stringify(["administrative_area_level_1", "political"]));
-                        document.getElementById("city").value = city.short_name;
-                        document.getElementById("state").value = state.long_name;
-                        document.getElementById("select").value = state.short_name;
 
-                    }
-                }
-            });
+            geocode(geocoder, pos);
             map.setCenter(pos);
             marker.setPosition(pos);
             var date = new Date();
@@ -54,7 +43,32 @@
       position: {lat: 59.327, lng: 18.067}
     });
     marker.addListener('drag', toggleBounce);
+    marker.addListener('dragend', toggleDragend);
 
+  }
+
+  function toggleDragend() {
+      var pos_dragend = {
+          lat: marker.getPosition().lat(),
+          lng: marker.getPosition().lng()
+      }
+      var geocoder2 = new google.maps.Geocoder;
+      geocode(geocoder2, pos_dragend);
+  }
+
+  function geocode(geocoder, pos) {
+      geocoder.geocode({'location': pos}, function(results, status) {
+          if (status == 'OK') {
+              if (results[0]) {
+                  const addr = results[0].address_components;
+                  const city = addr.find(obj => JSON.stringify(obj.types) == JSON.stringify(["locality", "political"]));
+                  const state = addr.find(obj => JSON.stringify(obj.types) == JSON.stringify(["administrative_area_level_1", "political"]));
+                  document.getElementById("city").value = city.short_name;
+                  document.getElementById("state").value = state.long_name;
+                  document.getElementById("select").value = state.short_name;
+              }
+          }
+      });
   }
 
   function toggleBounce() {

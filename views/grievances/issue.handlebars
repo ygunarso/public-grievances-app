@@ -16,13 +16,17 @@
     <p><label>Status</label> : {{this.status}}</p>
     {{#if (open status)}}
         <form method="POST" action="/issues/close/{{this._id}}">
-                <button type="submit">Close Issue</button>
+            <button type="submit">Close Issue</button>
         </form>
     {{else}}
         <form method="POST" action="/issues/open/{{this._id}}">
-                <button type="submit">Open Issue</button>
+            <button type="submit">Open Issue</button>
         </form>
     {{/if}}
+    <p><label>Likes</label> : {{this.likes}}</p>
+    <form method="POST" action="/issues/like/{{this._id}}">
+        <button type="submit">Like</button>
+    </form>
     <p>Comments:</p>
     {{#each this.comments}}
         <p><label>{{this.name}}</label> : {{this.content}}</p>

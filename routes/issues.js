@@ -82,6 +82,24 @@ router.post('/open/:id', async (req, res) => {
 	}
 });
 
+router.post('/like/:id', async (req, res) => {
+    try {
+        await issuesData.likeIssue(req.params.id);
+		res.redirect("/issues");
+	} catch (e) {
+		res.sendStatus(400);
+	}
+});
+
+router.post('/unlike/:id', async (req, res) => {
+    try {
+        await issuesData.unlikeIssue(req.params.id);
+		res.redirect("/issues");
+	} catch (e) {
+		res.sendStatus(400);
+	}
+});
+
 router.post('/createIssue', async (req, res) => {
 	let issueInfo = req.body;
 	if(req.session.user === undefined){
