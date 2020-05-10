@@ -15,6 +15,9 @@ const handlebarsInstance = exphbs.create({
           if (typeof spacing === 'number') return new Handlebars.SafeString(JSON.stringify(obj, null, spacing));
 
           return new Handlebars.SafeString(JSON.stringify(obj));
+        },
+        open: (value) => {
+            return value === "open";
         }
     }
 });

@@ -75,12 +75,23 @@ let exportedMethods = {
     return await this.getUserByEmail(user);
 
   },
-  async addIssueToUser(userId, newIssue) {
+  async addIssueToUser(userId, issueId) {
     let currentUser = await this.getUserById(userId);
     const userCollection = await users();
     const updateInfo = await userCollection.updateOne(
       { _id: userId },
-      { $addToSet: { issues: { id: newIssue._id } } }
+      { $addToSet: { issues: { _id: issueId } } }
+    );
+    if (!updateInfo.matchedCount && !updateInfo.modifiedCount)
+      throw 'Update failed';
+    return await this.getUserById(userId);
+  },
+  async removeIssueFromUser(userId, issueId) {
+    let currentUser = await this.getUserById(userId);
+    const userCollection = await users();
+    const updateInfo = await userCollection.updateOne(
+      { _id: userId },
+      { $pull: { issues: { _id: issueId } } }
     );
     if (!updateInfo.matchedCount && !updateInfo.modifiedCount)
       throw 'Update failed';
@@ -143,10 +154,3 @@ let exportedMethods = {
 
 
 module.exports = exportedMethods;
-
-
-
-
-
-
-

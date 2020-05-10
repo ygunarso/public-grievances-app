@@ -9,6 +9,16 @@
     <p><label>Longitude</label>: {{this.longitude}}</p>
     <p><label>City</label>: {{this.city}}</p>
     <p><label>State</label> : {{this.state}}</p>
+    <p><label>Status</label> : {{this.status}}</p>
+    {{#if (open status)}}
+        <form method="POST" action="/issues/close/{{this._id}}">
+                <button type="submit">Close Issue</button>
+        </form>
+    {{else}}
+        <form method="POST" action="/issues/open/{{this._id}}">
+                <button type="submit">Open Issue</button>
+        </form>
+    {{/if}}
     <p>Comments:</p>
     {{#each this.comments}}
         <p><label>{{this.name}}</label> : {{this.content}}</p>

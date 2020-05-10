@@ -55,7 +55,7 @@ let exportedMethods = {
         const issueInfo = await issueCollection.insertOne(newIssue);
         if (issueInfo.insertedCount === 0) throw 'Could not add issue';
         const id = issueInfo.insertedId;
-        await users.addIssueToUser(user._id, newIssue)
+        await users.addIssueToUser(user._id, id);
         const issue = await this.getIssueById(id);
         return issue;
     },
@@ -88,34 +88,49 @@ let exportedMethods = {
         const issueCollection = await issues();
 
         const issue = await this.getIssueById(id);
+        const userId = issue.userID;
         const deletionInfo = await issueCollection.removeOne({ _id: id });
         if (deletionInfo.deletedCount === 0) {
             throw "Could not delete issue";
         }
+        await issues.removeIssueFromUser(userId, id);
         return true;
     },
 
-    // DElete all the issues related to a specific user!
-    async removeAllIssue(id) {
-        if (!id) throw 'Issue ID missing';
+    // Delete all the issues related to a specific user!
+    async removeAllIssue(userId) {
+        if (!userId) throw 'User ID missing';
         const issueCollection = await issues();
 
         //const issue = await this.getIssueById(id);
-        const deletionInfo = await issueCollection.remove({ userID: id }); // This will remove all the issues related to a specific USER when he deletes the account in issue collection
+        const deletionInfo = await issueCollection.remove({ userID: userId }); // This will remove all the issues related to a specific USER when he deletes the account in issue collection
         if (deletionInfo.deletedCount === 0) {
             console.log("deleted all the issues");
-            return true
+            return true;
             //throw "Could not delete issue";
         }
         return true;
     },
-    // },
-    // async closeIssue(id) {
-    //
-    // },
-    // async openIssue(id) {
-    //
-    // },
+    async closeIssue(id) {
+        if (!id) throw 'Issue ID missing';
+        const issueCollection = await issues();
+        id = ObjectId(id);
+        const updatedInfo = await issueCollection.updateOne({ _id: id }, {$set: { status: "closed" }});
+        if (updatedInfo.modifiedCount === 0) {
+          throw 'could not close issue successfully';
+        }
+        return await this.getIssueById(id);
+    },
+    async openIssue(id) {
+        if (!id) throw 'Issue ID missing';
+        const issueCollection = await issues();
+        id = ObjectId(id);
+        const updatedInfo = await issueCollection.updateOne({ _id: id }, {$set: { status: "open" }});
+        if (updatedInfo.modifiedCount === 0) {
+          throw 'could not open issue successfully';
+        }
+        return await this.getIssueById(id);
+    },
     // async updateIssue(id) {
     //
     // },

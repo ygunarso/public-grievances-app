@@ -63,14 +63,32 @@ router.post('/comment/:id', async (req, res) => {
 	}
 });
 
+router.post('/close/:id', async (req, res) => {
+    try {
+        await issuesData.closeIssue(req.params.id);
+		res.redirect("/issues");
+	} catch (e) {
+		res.sendStatus(400);
+	}
+});
+
+router.post('/open/:id', async (req, res) => {
+    try {
+        await issuesData.openIssue(req.params.id);
+		res.redirect("/issues");
+	} catch (e) {
+		res.sendStatus(400);
+	}
+});
+
 router.post('/createIssue', async (req, res) => {
 	let issueInfo = req.body;
 	if(req.session.user === undefined){
 		res.status(400).json({ error: 'You must provide user ID' });
 		return;
 	}
-	else{
-		issueInfo.userID = req.session.user
+	else {
+		issueInfo.userID = req.session.user;
 	}
 	if (!issueInfo) {
 		res.status(400).json({ error: 'You must provide data to create a user' });
@@ -119,5 +137,6 @@ router.post('/createIssue', async (req, res) => {
 		res.sendStatus(400);
 	}
 });
+
 
 module.exports = router;
