@@ -35,7 +35,8 @@ let exportedMethods = {
     email = email.toLowerCase(); // stored in lower case to check if user exists already
     let checkemail = await userCollection.find({ email: email }).toArray(); // to check if email already taken
     if (checkemail.length != 0) {
-      throw "The User with this email already exits! Try different email."
+      return 1;
+      // throw "The User with this email already exits! Try different email."
     }
     hashedPassword = await bcrypt.hash(hashedPassword, 10); // hashpassword is passed by the user while sign up. salt rounds =10.
 
