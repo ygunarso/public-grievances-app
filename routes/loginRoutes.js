@@ -163,14 +163,14 @@ router.get('/userhome', async (req, res) => {
 
 router.post('/viewNearbyIssues', async (req, res) => {
     try {
-        let sessionInfo = req.session.user
+        let sessionInfo = req.session.user;
+        const issueInfo = req.body;
+        let issueList = await issuesData.getNearbyIssues(issueInfo.latitude,
+                                        issueInfo.longitude,
+                                        issueInfo.radius);
         if(req.session.user === undefined){
-            res.render('grievances/index');
+            res.render('grievances/index', { issueList: issueList });
         } else {
-            const issueInfo = req.body;
-            let issueList = await issuesData.getNearbyIssues(issueInfo.latitude,
-                                            issueInfo.longitude,
-                                            issueInfo.radius);
             res.render('grievances/userhome', { issueList: issueList });
         }
     } catch (error) {

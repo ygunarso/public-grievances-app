@@ -31,7 +31,14 @@
             var formatted_date = date.getFullYear().toString() + '-' +
                                 (date.getMonth() + 1).toString().padStart(2, 0) +
                                 '-' + date.getDate().toString().padStart(2, 0);
+            var min_date = (date.getFullYear() - 1).toString() + '-' +
+                                (date.getMonth() + 1).toString().padStart(2, 0) +
+                                '-' + date.getDate().toString().padStart(2, 0);
+            console.log(min_date);
+            console.log(formatted_date);
+
             document.getElementById("date").value = formatted_date;
+            document.getElementById("date").min = min_date;
             document.getElementById("date").max = formatted_date;
         });
     }
