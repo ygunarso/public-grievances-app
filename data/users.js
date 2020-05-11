@@ -45,6 +45,7 @@ let exportedMethods = {
       email: email,
       hashedPassword: hashedPassword,
       city: city,
+      admin: false,
       issues: [],
       state: state
     };
