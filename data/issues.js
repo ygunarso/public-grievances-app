@@ -123,14 +123,14 @@ let exportedMethods = {
     async removeIssue(id) {
         if (!id) throw 'Issue ID missing';
         const issueCollection = await issues();
-
         const issue = await this.getIssueById(id);
         const userId = issue.userID;
+        id = id = ObjectId(id);
         const deletionInfo = await issueCollection.removeOne({ _id: id });
         if (deletionInfo.deletedCount === 0) {
             throw "Could not delete issue";
         }
-        await issues.removeIssueFromUser(userId, id);
+        const result = await users.removeIssueFromUser(userId, id);
         return true;
     },
 
@@ -138,7 +138,6 @@ let exportedMethods = {
     async removeAllIssue(userId) {
         if (!userId) throw 'User ID missing';
         const issueCollection = await issues();
-
         //const issue = await this.getIssueById(id);
         const deletionInfo = await issueCollection.remove({ userID: userId }); // This will remove all the issues related to a specific USER when he deletes the account in issue collection
         if (deletionInfo.deletedCount === 0) {

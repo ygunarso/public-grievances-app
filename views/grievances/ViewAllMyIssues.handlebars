@@ -16,5 +16,8 @@
         <p><label>{{this.name}}</label> : {{this.content}}</p>
     {{/each}}
     <a href="/issueUpdate/{{this._id}}"> Update Your Issue</a>
+    <form method="POST" action="/issueDelete/{{this._id}}">
+    <button type="submit">Delete Issue</button>
+    </form>
     <br>
 {{/each}}
