@@ -24,7 +24,7 @@ router.get('/:id', async (req, res) => {
 		if(issueList === null || issueList === undefined)
 			res.status(404).json({ error: 'No issue found' })
 		else
-			res.render('grievances/issue',{issueList:issueList});
+			res.render('grievances/viewIssue',{issueList:issueList});
 	} catch (e) {
 		res.status(404).json({ error: 'issue not found' });
 	}
@@ -152,7 +152,7 @@ router.post('/createIssue', async (req, res) => {
 		//req.session.AuthCookie = req.sessionID;
         let sessionInfo = req.session.user;
 		const issueList = [newIssue];
-		res.render('grievances/issue',{issueList:issueList,sessionInfo:sessionInfo});
+		res.render('grievances/viewIssue',{issueList:issueList,sessionInfo:sessionInfo});
 	} catch (e) {
 		res.sendStatus(400);
 	}
