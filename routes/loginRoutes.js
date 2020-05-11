@@ -84,7 +84,6 @@ router.post('/signup', async (req, res) => {
         else{
             req.session.user = newUser.email
             req.session.AuthCookie = req.sessionID;
-            let sessionInfo = req.session.user
             return res.status(201).redirect("userhome");
         }
         //res.render('grievances/profile', { newUser: newUser, sessionInfo: sessionInfo });
@@ -148,7 +147,14 @@ router.get('/adminHome', async (req, res) => {
 
 router.get('/userhome', async (req, res) => {
     try {
-        res.render('grievances/userhome');
+        let sessionInfo = req.session.user
+        if(req.session.user === undefined){
+            res.render('grievances/index');
+        }
+        else{
+            res.render('grievances/userhome',{sessionInfo:sessionInfo});
+        }
+        
     } catch (error) {
         res.status(401).json({ error: "Page Not Found" });
     }
@@ -182,8 +188,15 @@ router.get('/logout', async (req, res) => {
 
 router.get('/profile', async (req, res) => {
     try {
-        const newUser = await usersData.getUserByEmail(req.session.user); //userId?
-        res.render('grievances/profile', { newUser: newUser })
+        let sessionInfo = req.session.user
+        if(req.session.user === undefined){
+            res.render('grievances/index');
+        }
+        else{
+            const newUser = await usersData.getUserByEmail(req.session.user); //userId?
+            res.render('grievances/profile', { newUser: newUser,sessionInfo:sessionInfo})
+        }
+        
     } catch (e) {
         res.render('grievances/error', { title: "error", message: e })
     }
