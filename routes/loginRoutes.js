@@ -78,10 +78,15 @@ router.post('/signup', async (req, res) => {
     try {
         const newUser = await usersData.addUser(userInfo.firstName, userInfo.lastName, userInfo.email, userInfo.hashedPassword, userInfo.city, userInfo.state);
         //res.json(newUser);
-        req.session.user = newUser.email
-        req.session.AuthCookie = req.sessionID;
-        let sessionInfo = req.session.user
-        return res.status(201).redirect("userhome");
+        if (newUser === 1){
+            res.render('grievances/error', { title: "Error", message: "User With this email Id already exists"});
+        }
+        else{
+            req.session.user = newUser.email
+            req.session.AuthCookie = req.sessionID;
+            let sessionInfo = req.session.user
+            return res.status(201).redirect("userhome");
+        }
         //res.render('grievances/profile', { newUser: newUser, sessionInfo: sessionInfo });
     } catch (e) {
         res.render('grievances/error', { title: "Error", message: e });
