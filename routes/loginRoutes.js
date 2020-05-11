@@ -26,6 +26,16 @@ router.get('/login', async (req, res) => {
     }
 
 });
+
+router.get('/adminLogin', async (req, res) => {
+    try {
+        res.render('grievances/adminLogin');
+    } catch (error) {
+        res.status(401).json({ error: "Page Not Found" });
+    }
+
+});
+
 router.get('/signup', async (req, res) => {
     try {
         res.render('grievances/signup');
@@ -92,6 +102,39 @@ router.post('/login', async (req, res) => {
         } else {
             res.status(401).render('grievances/login', { message: "You entered wrong password" });
         }
+    } catch (error) {
+        res.status(401).json({ error: "Page Not Found" });
+    }
+
+});
+
+
+router.post('/adminLogin', async (req, res) => {
+    try {
+        console.log(" Admin Logging Innnn")
+        let login_form_parameters = req.body;
+        let user_auth = await usersData.logInAdmin(login_form_parameters.email, login_form_parameters.password); // Admin Login function called
+        //here hashpassword is actually password entered by the user!! It is not hashed
+        if (user_auth != -1) {
+            req.session.user = login_form_parameters.email;
+            req.session.AuthCookie = req.sessionID; // alis for req.session.id;
+            return res.status(201).redirect("adminHome");
+        } else {
+            res.status(401).render('grievances/adminLogin', { message: "You entered wrong password" });
+        }
+    } catch (error) {
+        res.status(401).json({ error: "Page Not Found" });
+    }
+
+});
+
+router.get('/adminHome', async (req, res) => {
+    try {
+        let issueList = await issuesData.getAllIssues();
+        let sessionInfo = req.session.user;
+
+
+        res.render('grievances/adminHome', { sessionInfo: sessionInfo, issueList: issueList });
     } catch (error) {
         res.status(401).json({ error: "Page Not Found" });
     }
@@ -173,9 +216,9 @@ router.get('/ViewAllMyIssues', async (req, res) => {
         const newUser = await usersData.getUserByEmail(req.session.user); //userId?
         let sessionInfo = req.session.user
         const issueByUserId = await issuesData.getIssuesByUserId(newUser._id)
-        res.render('grievances/ViewAllMyIssues', {issueByUserId:issueByUserId,sessionInfo: sessionInfo })
+        res.render('grievances/ViewAllMyIssues', { issueByUserId: issueByUserId, sessionInfo: sessionInfo })
     } catch (e) {
-        res.render('grievances/error', { title: "error", message: "No issues found"})
+        res.render('grievances/error', { title: "error", message: "No issues found" })
     }
 
 });
@@ -183,11 +226,11 @@ router.get('/ViewAllMyIssues', async (req, res) => {
 //update issues
 router.get('/issueUpdate/:id', async (req, res) => {
     try {
-        if(req.session.user === undefined){
-            return res.render('grievances/error', { title: "error", message: "User Not Logged In"})
+        if (req.session.user === undefined) {
+            return res.render('grievances/error', { title: "error", message: "User Not Logged In" })
         }
         const issue = await issuesData.getIssueById(req.params.id)
-        res.render('grievances/issueUpdate',{issue:issue})
+        res.render('grievances/issueUpdate', { issue: issue })
         // const newUser = await usersData.getUserByEmail(req.session.user);
         // res.render('grievances/profileupdate', { newUser: newUser })
     } catch (e) {
@@ -196,8 +239,8 @@ router.get('/issueUpdate/:id', async (req, res) => {
 });
 
 router.post('/issueUpdate/:id', async (req, res) => {
-    if(req.session.user === undefined){
-        return res.render('grievances/error', { title: "error", message: "User Not Logged In"})
+    if (req.session.user === undefined) {
+        return res.render('grievances/error', { title: "error", message: "User Not Logged In" })
     }
     const requestBody = req.body;
     let updatedObject = {};
@@ -218,10 +261,10 @@ router.post('/issueUpdate/:id', async (req, res) => {
     }
 
     try {
-        const updatedIssue = await issuesData.updateIssue(req.params.id,requestBody.name,requestBody.category,requestBody.date,requestBody.latitude,requestBody.longitude,requestBody.city,requestBody.state)
+        const updatedIssue = await issuesData.updateIssue(req.params.id, requestBody.name, requestBody.category, requestBody.date, requestBody.latitude, requestBody.longitude, requestBody.city, requestBody.state)
         let sessionInfo = req.session.user;
-		const issueList = [updatedIssue];
-        res.render('grievances/issueUpdateSuccessful', { issueList:issueList,sessionInfo:sessionInfo})
+        const issueList = [updatedIssue];
+        res.render('grievances/issueUpdateSuccessful', { issueList: issueList, sessionInfo: sessionInfo })
         // res.json(updatedUser);
     } catch (e) {
         res.status(500).json({ error: e });

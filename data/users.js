@@ -159,8 +159,23 @@ let exportedMethods = {
       return -1;
     }
 
+  },
+
+
+  // Admin Login
+  async logInAdmin(email, password) {
+    const userCollection = await users();
+    const database_record = await userCollection.findOne({ email: email });
+    if (database_record != null && database_record.admin) { // 
+      let password_verification = await bcrypt.compare(password, database_record.hashedPassword);
+      if (password_verification) {
+        return database_record._id;
+      } else {
+        return -1;
+      }
+    } else {
+      return -1;
+    }
   }
 };
-
-
 module.exports = exportedMethods;
