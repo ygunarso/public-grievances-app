@@ -89,7 +89,7 @@ let exportedMethods = {
         issueId = ObjectId(issueId)
         const issueCollection = await issues();
         const updatedIssueData = {};
-    
+
         if (name) {
             updatedIssueData.name = name;
         }
@@ -111,14 +111,14 @@ let exportedMethods = {
         if (state) {
             updatedIssueData.state = state;
         }
-    
+
         const updatedInfo = await issueCollection.updateOne({ _id: issueId }, { $set: updatedIssueData });
         if (updatedInfo.modifiedCount === 0) {
-          throw 'could not update the user successfully';
+          console.log('No updates made');
         }
-    
+
         return await this.getIssueById(issueId)
-    
+
     },
     async removeIssue(id) {
         if (!id) throw 'Issue ID missing';
