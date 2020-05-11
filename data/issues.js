@@ -5,6 +5,11 @@ const users = require('./users');
 const { ObjectId } = require('mongodb');
 const uuid = require('node-uuid');
 
+function kmToCoordinate(km) {
+    // 1 km = 0.00654 in coordinates
+    return km * 0.00654;
+}
+
 let exportedMethods = {
     async getAllIssues() {
         const issueCollection = await issues();
@@ -46,8 +51,8 @@ let exportedMethods = {
             category: category,
             date: date,
             likes: 0,
-            latitude: latitude,
-            longitude: longitude,
+            latitude: parseFloat(latitude),
+            longitude: parseFloat(longitude),
             city: city,
             state: state,
             status: "open",
@@ -83,6 +88,18 @@ let exportedMethods = {
         const issueCollection = await issues();
         const issueList = await issueCollection.find({ status: status })
             .sort({ date: -1 }).toArray();
+        return issueList;
+    },
+    async getNearbyIssues(lat, lng, radius) {
+        const issueCollection = await issues();
+        let lat_max = parseFloat(lat) + kmToCoordinate(radius);
+        let lat_min = parseFloat(lat) - kmToCoordinate(radius);
+
+        let lng_max = parseFloat(lng) + kmToCoordinate(radius);
+        let lng_min = parseFloat(lng) - kmToCoordinate(radius);
+
+        const issueList = await issueCollection.find({ latitude: { $gt: lat_min, $lt: lat_max } },
+                                                        { longitude: { $gt: lng_min, $lt: lng_max } }).toArray();
         return issueList;
     },
     async updateIssue(issueId, name, category, date, latitude,longitude,city,state) {

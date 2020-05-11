@@ -155,6 +155,19 @@ router.get('/userhome', async (req, res) => {
 
 });
 
+router.post('/viewNearbyIssues', async (req, res) => {
+    try {
+        const issueInfo = req.body;
+        let issueList = await issuesData.getNearbyIssues(issueInfo.latitude,
+                                        issueInfo.longitude,
+                                        issueInfo.radius);
+        res.render('grievances/userhome', { issueList: issueList });
+    } catch (error) {
+        res.status(401).json({ error: "Page Not Found" });
+    }
+
+});
+
 router.get('/logout', async (req, res) => {
     try {
         req.session.destroy();
