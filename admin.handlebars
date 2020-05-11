@@ -1,0 +1,42 @@
+
+<section>
+
+    <h2>Welcome Admin!</h2>
+    
+    <a href="/profile"> View Your Profile</a>
+
+    <h3>Here is the List of Grievances..</h3>
+   <table>
+    <thead> 
+        <th>First Name</th> 
+        <th>Last Name</th> 
+        <th>Issues</th> 
+        <th>Status</th>
+    </thead> 
+    <tbody> 
+        {{#users}} 
+        <tr> 
+            <td>{{this.firstName}}</td> 
+            <td>{{this.lastname}}</td> 
+              {{/users}} 
+              {{#issues}}
+            <td>{{this.Name}}</td> 
+            <td>{{this.Status}}
+            <select>        
+            <option value="Open">Open</option>
+            <option value="Closed">Closed</option></td>
+            {{/issues}}
+       </select>
+        </tr> 
+      
+    </tbody> 
+</table> 
+    
+</script>
+    <br>
+ <form id="login-form" method="GET" action="/logout">
+        <button type="submit">Logout</button>
+        <br>
+        <br>
+    </form>
+</section>
