@@ -19,12 +19,18 @@ router.get('/createIssue', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
 	try {
-		let issue = await issuesData.getIssueById(req.params.id);
-		const issueList = [issue];
-		if(issueList === null || issueList === undefined)
-			res.status(404).json({ error: 'No issue found' })
-		else
-			res.render('grievances/viewIssue',{issueList:issueList});
+		if(req.session.user === undefined){
+            res.render('grievances/login', {message: "You must login first!"});
+		}
+		else{
+			let issue = await issuesData.getIssueById(req.params.id);
+			const issueList = [issue];
+			if(issueList === null || issueList === undefined)
+				res.status(404).json({ error: 'No issue found' })
+			else
+				res.render('grievances/viewIssue',{issueList:issueList});
+		}
+		
 	} catch (e) {
 		res.status(404).json({ error: 'issue not found' });
 	}
