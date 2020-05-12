@@ -7,14 +7,24 @@
 h1 {
     font-size: 50pt;
     color: black;
+    align-content: center;
+}
+
+a{
+  align-content: center;
+
 }
 
 #map {
   height: 300px;
+  border: royalblue;
+  
 }
 
 html, body {
   height: 100%;
   margin: 0;
   padding: 0;
+  background-color: powderblue;
+  align-content: center;
 }
