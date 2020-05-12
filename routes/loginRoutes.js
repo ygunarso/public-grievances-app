@@ -169,9 +169,9 @@ router.post('/viewNearbyIssues', async (req, res) => {
                                         issueInfo.longitude,
                                         issueInfo.radius);
         if(req.session.user === undefined){
-            res.render('grievances/index', { issueList: issueList });
+            res.render('grievances/index', { issueList: issueList, radius: issueInfo.radius });
         } else {
-            res.render('grievances/userhome', { issueList: issueList });
+            res.render('grievances/userhome', { issueList: issueList, radius: issueInfo.radius });
         }
     } catch (error) {
         res.status(401).json({ error: "Page Not Found" });
