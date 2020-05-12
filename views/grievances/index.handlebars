@@ -1,7 +1,7 @@
 <section>
-    <a href="/signup">New User? Signup Here</a>
+    <a href="/signup"style="display: inline">New User? Signup Here</a>
     <br><br>
-    <a href="/login"> User Login</a>
+    <a href="/login" style="display: inline"> User Login</a>
     <br><br>
     <a href="/adminLogin"> Admin Login</a>
     <p>Please use the User Login if you dont have the Admin rights</p>
@@ -15,6 +15,7 @@
     <form method="POST" action="/viewNearbyIssues">
         <input hidden name="latitude" id="latitude">
         <input hidden name="longitude" id="longitude">
+        <br> 
         <label for="radius">Radius: </label>
         <input type="number" name="radius" value="0">
         <button type="submit">View Nearby Issues</button>
