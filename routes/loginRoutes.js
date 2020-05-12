@@ -3,6 +3,7 @@ const router = express.Router();
 const data = require('../data');
 const usersData = data.users;
 const issuesData = data.issues;
+const xss = require('xss');
 
 router.get('/', async (req, res) => {
     try {
@@ -20,13 +21,13 @@ router.get('/', async (req, res) => {
 
 router.get('/login', async (req, res) => {
     try {
-        if(req.session.user === undefined){
+        if (req.session.user === undefined) {
             res.render('grievances/login');
         }
-        else{
+        else {
             res.redirect('userhome');
         }
-        
+
     } catch (error) {
         res.status(401).json({ error: "Page Not Found" });
     }
@@ -44,13 +45,13 @@ router.get('/adminLogin', async (req, res) => {
 
 router.get('/signup', async (req, res) => {
     try {
-        if(req.session.user === undefined){
+        if (req.session.user === undefined) {
             res.render('grievances/signup');
         }
-        else{
+        else {
             res.redirect('userhome');
         }
-        
+
     } catch (error) {
         res.status(401).json({ error: "Page Not Found" });
     }
@@ -58,7 +59,7 @@ router.get('/signup', async (req, res) => {
 });
 
 router.post('/signup', async (req, res) => {
-    let userInfo = req.body;
+    let userInfo = xss(req.body);
     if (!userInfo) {
         res.status(400).json({ error: 'You must provide data to create a user' });
         return;
@@ -90,10 +91,10 @@ router.post('/signup', async (req, res) => {
     try {
         const newUser = await usersData.addUser(userInfo.firstName, userInfo.lastName, userInfo.email, userInfo.hashedPassword, userInfo.city, userInfo.state);
         //res.json(newUser);
-        if (newUser === 1){
-            res.render('grievances/error', { title: "Error", message: "User With this email Id already exists"});
+        if (newUser === 1) {
+            res.render('grievances/error', { title: "Error", message: "User With this email Id already exists" });
         }
-        else{
+        else {
             req.session.user = newUser.email
             req.session.AuthCookie = req.sessionID;
             return res.status(201).redirect("userhome");
@@ -108,7 +109,7 @@ router.post('/signup', async (req, res) => {
 router.post('/login', async (req, res) => {
     try {
         console.log("Logging Innnn")
-        let login_form_parameters = req.body;
+        let login_form_parameters = xss(req.body);
         let user_auth = await usersData.logInUser(login_form_parameters.email, login_form_parameters.password);
         //here hashpassword is actually password entered by the user!! It is not hashed
         if (user_auth != -1) {
@@ -128,7 +129,7 @@ router.post('/login', async (req, res) => {
 router.post('/adminLogin', async (req, res) => {
     try {
         console.log(" Admin Logging Innnn")
-        let login_form_parameters = req.body;
+        let login_form_parameters = xss(req.body);
         let user_auth = await usersData.logInAdmin(login_form_parameters.email, login_form_parameters.password); // Admin Login function called
         //here hashpassword is actually password entered by the user!! It is not hashed
         if (user_auth != -1) {
@@ -148,16 +149,16 @@ router.get('/adminHome', async (req, res) => {
     try {
         let issueList = await issuesData.getAllIssues();
         let sessionInfo = req.session.user;
-        if(req.session.user === undefined){
+        if (req.session.user === undefined) {
             res.redirect('/');
         }
-        else{
+        else {
             const user = await usersData.getUserByEmail(req.session.user)
-		    if(user.admin === true){
+            if (user.admin === true) {
                 res.render('grievances/adminHome', { sessionInfo: sessionInfo, issueList: issueList });
             }
-            else{
-            res.redirect('/');
+            else {
+                res.redirect('/');
             }
         }
     } catch (error) {
@@ -169,11 +170,11 @@ router.get('/adminHome', async (req, res) => {
 router.get('/userhome', async (req, res) => {
     try {
         let sessionInfo = req.session.user
-        if(req.session.user === undefined){
+        if (req.session.user === undefined) {
             res.render('grievances/index');
         }
-        else{
-            res.render('grievances/userhome',{sessionInfo:sessionInfo});
+        else {
+            res.render('grievances/userhome', { sessionInfo: sessionInfo });
         }
 
     } catch (error) {
@@ -185,11 +186,11 @@ router.get('/userhome', async (req, res) => {
 router.post('/viewNearbyIssues', async (req, res) => {
     try {
         let sessionInfo = req.session.user;
-        const issueInfo = req.body;
+        const issueInfo = xss(req.body);
         let issueList = await issuesData.getNearbyIssues(issueInfo.latitude,
-                                        issueInfo.longitude,
-                                        issueInfo.radius);
-        if(req.session.user === undefined){
+            issueInfo.longitude,
+            issueInfo.radius);
+        if (req.session.user === undefined) {
             res.render('grievances/index', { issueList: issueList, radius: issueInfo.radius });
         } else {
             res.render('grievances/userhome', { issueList: issueList, radius: issueInfo.radius });
@@ -202,14 +203,14 @@ router.post('/viewNearbyIssues', async (req, res) => {
 
 router.get('/logout', async (req, res) => {
     try {
-        if(req.session.user === undefined){
+        if (req.session.user === undefined) {
             res.redirect('/');
         }
-        else{
+        else {
             req.session.destroy();
             res.redirect('/');
         }
-        
+
     } catch (error) {
         res.status(401).json({ error: "Page Not Found" });
     }
@@ -221,12 +222,12 @@ router.get('/logout', async (req, res) => {
 router.get('/profile', async (req, res) => {
     try {
         let sessionInfo = req.session.user
-        if(req.session.user === undefined){
+        if (req.session.user === undefined) {
             res.render('grievances/index');
         }
-        else{
+        else {
             const newUser = await usersData.getUserByEmail(req.session.user); //userId?
-            res.render('grievances/profile', { newUser: newUser,sessionInfo:sessionInfo})
+            res.render('grievances/profile', { newUser: newUser, sessionInfo: sessionInfo })
         }
 
     } catch (e) {
@@ -248,7 +249,7 @@ router.get('/profileupdate', async (req, res) => {
 });
 
 router.post('/profileupdate', async (req, res) => {
-    const requestBody = req.body;
+    const requestBody = xss(req.body);
     let updatedObject = {};
     try {
         const oldPost = await usersData.getUserByEmail(req.session.user);
@@ -305,7 +306,7 @@ router.post('/issueUpdate/:id', async (req, res) => {
     if (req.session.user === undefined) {
         return res.render('grievances/error', { title: "error", message: "User Not Logged In" })
     }
-    const requestBody = req.body;
+    const requestBody = xss(req.body);
     let updatedObject = {};
     try {
         const oldIssue = await issuesData.getIssueById(req.params.id)
