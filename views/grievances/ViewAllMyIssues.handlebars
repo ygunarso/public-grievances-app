@@ -18,6 +18,10 @@
     {{#each this.comments}}
         <p><label>{{this.name}}</label> : {{this.content}}</p>
     {{/each}}
+    <form method="POST" action="/issues/comment/{{this._id}}">
+        <textarea name="content" cols="40" rows="5"></textarea>
+        <button type="submit">Comment</button>
+    </form>
     <a class="auth" href="/issueUpdate/{{this._id}}">Update Issue</a>
     <form method="POST" action="/issueDelete/{{this._id}}">
         <button type="submit">Delete</button>
