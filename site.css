@@ -17,6 +17,7 @@ h1 {
 a{
   align-content: center;
   text-align: center;
+  color: navy;
 
 }
 
@@ -24,7 +25,7 @@ a{
   height: 300px;
   border: royalblue;
   background-color: black;
-  margin: 50px;
+  margin: 20px;
   
 }
 
@@ -37,8 +38,8 @@ html, body {
   text-align: center;
 }
 button:hover {
-  background-color: lightgreen;
-  color: black;
+  background-color: navy;
+  color: white;
 }
 button {
 
@@ -51,3 +52,81 @@ button {
   border-radius: 5px;
   text-align: center;
 }
+@media(max-width: 767px){
+.page1{
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  height: auto;
+  align-content: center;
+  align-items: center;
+  color: navy;
+  }
+}
+.container1{
+  height: 320px;
+  margin: 0 auto;
+  width: 630px;
+  display:flex;
+  align-content: center;
+  align-items: center;
+  color: navy;
+}
+@media(max-width: 767px){
+  .container1{
+    height: 320px;
+    width:630px;
+    align-content: center;
+    align-items: center;
+    }
+  }
+  .left1{
+    background: white;
+    height: calc(100%-40px);
+    top:20px;
+    width: 50%;
+    margin-left: 160px;
+    align-content: center;
+    align-items: center;
+  }
+  @media(max-width:767px){
+    .left1{
+      height: 100%;
+      width: calc(100%-40px);
+      left: 40px;
+      max-height: 270px;
+      align-content: center;
+      align-items: center;
+    }
+  }
+  .login1{
+    font-size: 50px;
+    margin: 50px 50px 50px;
+    font-weight: 900;
+    align-content: center;
+    text-align: center;
+    align-items: center;
+  }
+ .right1{
+   background: black;
+   box-shadow: 0px 0px 40px 16px rgba(0,0,0,0.22);
+  color:black;
+  position: relative;
+  width: 50%;
+  align-content: center;
+  align-items: center;
+}
+@media (max-width: 767px) {
+  .right1{
+    flex-shrink: 0;
+    height: 100%;
+    width: 100%;
+    max-height: 350px;
+    align-items: center;
+  }
+}
+.form1{
+  margin: 40px;
+  position: absolute;
+  
+}
+ 
