@@ -5,22 +5,10 @@ const outRoutes = require('./loginRoutes')
 
 const constructorMethod = app => {
   app.use("/issues", issuesRoutes)
-  app.use("/users", usersRoutes)
+  // app.use("/users", usersRoutes)
   app.use("/", outRoutes)
-
-  // app.post('/test', async (req, res) => {
-  //   try{
-  //       let data = req.body;
-  //       console.log(data)
-  //       res.render('grievances/test');
-  //   }
-  //   catch (e) {
-  //   res.sendStatus(400);
-  // }
-  // });
-
-
+  app.use("*", (req, res) => {
+    res.sendStatus(404);
+  });
 };
-
-
 module.exports = constructorMethod

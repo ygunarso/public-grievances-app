@@ -6,10 +6,10 @@ const issuesData = data.issues;
 
 router.get('/', async (req, res) => {
     try {
-        if (req.session.user) {
-            res.redirect('userhome');
-        } else {
+        if (req.session.user === undefined) {
             res.render('grievances/index');
+        } else {
+            res.redirect('userhome');
         }
 
     } catch (error) {
@@ -20,7 +20,13 @@ router.get('/', async (req, res) => {
 
 router.get('/login', async (req, res) => {
     try {
-        res.render('grievances/login');
+        if(req.session.user === undefined){
+            res.render('grievances/login');
+        }
+        else{
+            res.redirect('userhome');
+        }
+        
     } catch (error) {
         res.status(401).json({ error: "Page Not Found" });
     }
@@ -38,7 +44,13 @@ router.get('/adminLogin', async (req, res) => {
 
 router.get('/signup', async (req, res) => {
     try {
-        res.render('grievances/signup');
+        if(req.session.user === undefined){
+            res.render('grievances/signup');
+        }
+        else{
+            res.redirect('userhome');
+        }
+        
     } catch (error) {
         res.status(401).json({ error: "Page Not Found" });
     }
@@ -136,8 +148,6 @@ router.get('/adminHome', async (req, res) => {
     try {
         let issueList = await issuesData.getAllIssues();
         let sessionInfo = req.session.user;
-
-
         res.render('grievances/adminHome', { sessionInfo: sessionInfo, issueList: issueList });
     } catch (error) {
         res.status(401).json({ error: "Page Not Found" });
@@ -181,8 +191,14 @@ router.post('/viewNearbyIssues', async (req, res) => {
 
 router.get('/logout', async (req, res) => {
     try {
-        req.session.destroy();
-        res.redirect('/');
+        if(req.session.user === undefined){
+            res.redirect('/');
+        }
+        else{
+            req.session.destroy();
+            res.redirect('/');
+        }
+        
     } catch (error) {
         res.status(401).json({ error: "Page Not Found" });
     }
