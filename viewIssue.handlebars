@@ -1,0 +1,30 @@
+<a href="/userhome">Go Home</a><br><br>
+<a href="/ViewAllMyIssues">View All My Issues</a>
+<form id="login-form" method="GET" action="/logout" >
+    <button type="submit" style = "position:fixed; right:10px; top:10px"><b>Logout</b></button>
+</form>
+{{#each issueList}}
+    <p><label>Name</label> : {{this.name}}</p>
+    <p><label>Category</label> : {{this.category}}</p>
+    <p><label>Date</label>: {{this.date}}</p>
+    <p><label>Latitude</label>: {{this.latitude}}</p>
+    <p><label>Longitude</label>: {{this.longitude}}</p>
+    <p><label>City</label>: {{this.city}}</p>
+    <p><label>State</label> : {{this.state}}</p>
+    <b>Comments:</b> <br><br>
+    {{#each this.comments}}
+        <label>{{this.name}}</label> : {{this.content}}
+    {{/each}}
+    <form method="POST" action="/issues/comment/{{this._id}}">
+        <textarea name="content" cols="40" rows="5"></textarea>
+        <br><br>
+        <button type="submit"><b>Comment</b></button>
+    </form>
+    <br>
+    <a href="/issueUpdate/{{this._id}}">Update Your Issue</a> <br>
+    <form method="POST" action="/issueDelete/{{this._id}}">
+    <br><button type="submit"><b>Delete Issue</b></button>
+    </form>
+    <br>
+    
+{{/each}}
