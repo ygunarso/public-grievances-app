@@ -1,27 +1,22 @@
 <form id="signup-form" method="POST" action="/signup">
     <label>First Name</label>
-    <input type="text" id="firstName" name="firstName" placeholder="Enter first Name" required>
-    <br>
-    <br>
+    <input type="text" id="firstName" name="firstName" placeholder="Enter First Name" required><br>
+
     <label>Last Name</label>
-    <input type="text" id="lastName" name="lastName" placeholder="Enter Last Name" required>
-    <br>
-    <br>
+    <input type="text" id="lastName" name="lastName" placeholder="Enter Last Name" required><br>
+
     <label>Email</label>
-    <input type="email" id="email" name="email" placeholder="Enter Email" required>
-    <br>
-    <br>
+    <input type="email" id="email" name="email" placeholder="Enter Email" required><br>
+
     <label>Password</label>
     <input type="password" id="hashedPassword" name="hashedPassword" placeholder="Enter Password"
-        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
-    <p>Your password must contain at least one numeric and one uppercase and lowercase letter, and at least 8 or
+        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required><br>
+    <p class="dim">Your password must contain at least one numeric and one uppercase and lowercase letter, and at least 8 or
         more characters</p>
-    <br>
-    <br>
+
     <label>City</label>
-    <input type="text" id="city" name="city" placeholder="Enter City" required>
-    <br>
-    <br>
+    <input type="text" id="city" name="city" placeholder="Enter City" required><br>
+
     <label for="state">Choose a State:</label>
     <select id="state" name="state" required >
         <option value="">None</option>
@@ -76,10 +71,8 @@
         <option value="WV">West Virginia</option>
         <option value="WI">Wisconsin</option>
         <option value="WY">Wyoming</option>
-    </select>
-    <br>
-    <br>
+    </select><br><br>
+
     <button type="submit">Submit</button>
-    <br>
-    <br>
+
 </form>

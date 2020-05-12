@@ -1,20 +1,86 @@
-* {
-    font-family: Helvetica, sans-serif;
-    /* background-color: #CEC8C1;
-    color: #595762; */
+html {
+    background-color: white;
+    background-color: #262A2F;
+    color: #C9CCD3;
+    font-family: "Roboto", Helvetica, sans-serif;
+    text-align: center;
 }
 
 h1 {
     font-size: 50pt;
-    color: black;
+    margin-bottom: 10px;
+}
+
+form * {
+    font-size: 20pt;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+form p {
+    font-size: 12pt;
+    width: 60%;
+    text-align: center;
+    margin: auto;
+}
+
+.dim {
+    color: dimgray;
+}
+
+.location {
+    font-weight: bold;
+    font-size: 16pt;
+    display: inline;
 }
 
 #map {
-  height: 300px;
+  height: 500px;
+  color: initial;
+  border-radius: 40px;
+  width: 80%;
+  margin: auto;
 }
 
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
+.error {
+    color: #C9CCD3;
+    font-weight: bold;
+    background-color: red;
+    padding: 5px 20px;
+    display: inline;
+    border-radius: 20px;
+
+}
+
+.auth, button {
+    font-size: 20pt;
+    background-color: #5DADE2;
+    border-radius: 20px;
+    color: #262A2F;
+    border: 0;
+    padding: 5px 20px;
+    text-decoration: none;
+    margin: 5px;
+
+}
+
+.auth {
+    display: inline-block;
+}
+
+.inline {
+    display: inline;
+}
+
+input, select {
+    font-size: 20pt;
+    color: white;
+    border-radius: 20px;
+    border: 0;
+    background-color: #4B5162;
+    padding: 5px 12px;
+}
+
+#radius {
+    width: 100px;
 }

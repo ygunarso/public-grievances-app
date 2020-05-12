@@ -1,22 +1,20 @@
 <section>
-    <a href="/signup">New User? Signup Here</a>
-    <br><br>
-    <a href="/login"> User Login</a>
-    <br><br>
-    <a href="/adminLogin"> Admin Login</a>
-    <p>Please use the User Login if you dont have the Admin rights</p>
+    <p class="inline">Login </p>
+    <a class="auth" href="/login">User</a>
+    <a class="auth" href="/adminLogin">Admin</a><br>
+    <p class="inline">New User?</p><a class="auth" href="/signup">Sign Up</a><br>
 
-    <p style="display: inline">Current Location: </p>
-    <p id=city style="display: inline"></p>
-    <p style="display: inline">, </p>
-    <p id=state style="display: inline"></p>
-    <br>
+    <p class="inline">Current Location: </p>
+    <p id=city class="location"></p>
+    <p class="inline">, </p>
+    <p id=state class="location"></p>
 
     <form method="POST" action="/viewNearbyIssues">
         <input hidden name="latitude" id="latitude">
         <input hidden name="longitude" id="longitude">
         <label for="radius">Radius: </label>
-        <input type="number" name="radius" value="0">
+        <input type="number" id="radius" name="radius" value="0">
+        <p class="inline">km</p>
         <button type="submit">View Nearby Issues</button>
     </form>
 

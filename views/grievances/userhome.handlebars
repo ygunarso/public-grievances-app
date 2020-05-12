@@ -1,31 +1,24 @@
 <section>
-    <p>Welcome {{sessionInfo}}</p>
-    <h2>HOME PAGE !!</h2>
+    <h2>Home Page</h2>
+    <h2>Welcome {{sessionInfo}}</h2>
+    <br>
+    <a class="auth" href="issues/createIssue">Create Issue</a><br>
 
-    <br>
-    <a href="issues/createIssue">Create Issue</a>
-    <br>
-    <br>
+    <a class="auth" href="/profile"> View Your Profile</a><br>
 
-    <a href="/profile"> View Your Profile</a>
-    <br>
-    <br>
-    <a href="/ViewAllMyIssues">View All My Issues</a>
-    <br>
-    <br>
-    <br>
-    <br>
-    <p style="display: inline">Current Location: </p>
-    <p id=city style="display: inline"></p>
-    <p style="display: inline">, </p>
-    <p id=state style="display: inline"></p>
-    <br>
-    
+    <a class="auth" href="/ViewAllMyIssues">View All My Issues</a><br><br>
+
+    <p class="inline">Current Location: </p>
+    <p id=city class="location"></p>
+    <p class="inline">, </p>
+    <p id=state class="location"></p>
+
     <form method="POST" action="/viewNearbyIssues">
         <input hidden name="latitude" id="latitude">
         <input hidden name="longitude" id="longitude">
         <label for="radius">Radius: </label>
-        <input type="number" name="radius" value="0">
+        <input type="number" id="radius" name="radius" value="0">
+        <p class="inline">km</p>
         <button type="submit">View Nearby Issues</button>
     </form>
 
@@ -87,9 +80,8 @@
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDs-DaFuYDPJ1ThmZywl6Ve2AMTB03iSGI&callback=initMap">
     </script>
 
+    <br>
     <form id="login-form" method="GET" action="/logout">
         <button type="submit">Logout</button>
-        <br>
-        <br>
     </form>
 </section>
