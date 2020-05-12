@@ -15,7 +15,7 @@
     <br>
     <br>
     <br>
-    <p style="display: inline">Current Location: </p>
+    <p style="display: inline"><b>Current Location:</b></p>
     <p id=city style="display: inline"></p>
     <p style="display: inline">, </p>
     <p id=state style="display: inline"></p>
@@ -24,9 +24,10 @@
     <form method="POST" action="/viewNearbyIssues">
         <input hidden name="latitude" id="latitude">
         <input hidden name="longitude" id="longitude">
-        <label for="radius">Radius: </label>
-        <input type="number" name="radius" value="0">
-        <button type="submit">View Nearby Issues</button>
+        <br> 
+        <label for="radius"><b>Radius:</b></label>
+        <input type="number" name="radius" value="0" style="height:28px; font-size:medium; width:120px">
+        <button type="submit"><b>View Nearby Issues</b></button>
     </form>
 
     <div id="map"></div>
