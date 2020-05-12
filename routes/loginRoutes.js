@@ -26,7 +26,7 @@ router.get('/login', async (req, res) => {
         else{
             res.redirect('userhome');
         }
-        
+
     } catch (error) {
         res.status(401).json({ error: "Page Not Found" });
     }
@@ -50,7 +50,7 @@ router.get('/signup', async (req, res) => {
         else{
             res.redirect('userhome');
         }
-        
+
     } catch (error) {
         res.status(401).json({ error: "Page Not Found" });
     }
@@ -209,7 +209,7 @@ router.get('/logout', async (req, res) => {
             req.session.destroy();
             res.redirect('/');
         }
-        
+
     } catch (error) {
         res.status(401).json({ error: "Page Not Found" });
     }

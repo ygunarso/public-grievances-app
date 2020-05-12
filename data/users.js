@@ -122,15 +122,15 @@ let exportedMethods = {
       return;
     }
     try {
-      const deletionInfo = await issueCollection.remove({ userID: userdel._id }); // This will remove all the issues related to a specific USER when he deletes the account in issue collection
+      const deletionInfo = await issueCollection.deleteMany({ userID: userdel._id }); // This will remove all the issues related to a specific USER when he deletes the account in issue collection
       if (deletionInfo.deletedCount === 0) {
-        console.log("COULD NOT DELETE");
+        console.log("No issues deleted");
       }
     } catch (e) {
       console.log(e);
     }
 
-    const deletionInfo = await userCollection.removeOne({ email: user });
+    const deletionInfo = await userCollection.deleteOne({ email: user });
     if (deletionInfo.deletedCount === 0) {
       throw "Could not delete the User";
     }
@@ -167,7 +167,7 @@ let exportedMethods = {
   async logInAdmin(email, password) {
     const userCollection = await users();
     const database_record = await userCollection.findOne({ email: email });
-    if (database_record != null && database_record.admin) { // 
+    if (database_record != null && database_record.admin) { //
       let password_verification = await bcrypt.compare(password, database_record.hashedPassword);
       if (password_verification) {
         return database_record._id;

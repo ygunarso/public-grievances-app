@@ -14,9 +14,9 @@
         <input hidden name="longitude" id="longitude">
         <label for="radius">Radius: </label>
         {{#if radius}}
-            <input type="number" id="radius" name="radius" value="{{radius}}">
+            <input type="number" id="radius" name="radius" value="{{radius}}" min="0">
         {{else}}
-            <input type="number" id="radius" name="radius" value="0">
+            <input type="number" id="radius" name="radius" value="0" min="0">
         {{/if}}
         <p class="inline">km</p>
         <button type="submit">View Nearby Issues</button>

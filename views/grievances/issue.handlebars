@@ -9,34 +9,39 @@
 </form>
 
 {{#each issueList}}
-    <p><label>Name</label> : {{this.name}}</p>
-    <p><label>Category</label> : {{this.category}}</p>
-    <p><label>Date</label>: {{this.date}}</p>
-    <p><label>Latitude</label>: {{this.latitude}}</p>
-    <p><label>Longitude</label>: {{this.longitude}}</p>
-    <p><label>City</label>: {{this.city}}</p>
-    <p><label>State</label> : {{this.state}}</p>
-    <p><label>Status</label> : {{this.status}}</p>
-    {{#if (open status)}}
-        <form method="POST" action="/issues/close/{{this._id}}">
-            <button type="submit">Close Issue</button>
+    <div data-toggle="collapse" data-target="#{{this._id}}" class="panel-heading">
+        <h4 class="panel-title">
+          <p>{{this.name}}</p>
+        </h4>
+        <form method="POST" action="/issues/like/{{this._id}}">
+            <p class="inline">{{this.likes}}</p>
+            <button class="icons" type="submit">Like</button>
         </form>
-    {{else}}
-        <form method="POST" action="/issues/open/{{this._id}}">
-            <button type="submit">Open Issue</button>
+    </div>
+    <div id="{{this._id}}" class="collapse">
+        <p><label>Category</label> : {{this.category}}</p>
+        <p><label>Date</label>: {{this.date}}</p>
+        <p><label>Latitude</label>: {{this.latitude}}</p>
+        <p><label>Longitude</label>: {{this.longitude}}</p>
+        <p><label>City</label>: {{this.city}}</p>
+        <p><label>State</label> : {{this.state}}</p>
+        <p><label>Status</label> : {{this.status}}</p>
+        <!-- {{#if (open status)}}
+            <form method="POST" action="/issues/close/{{this._id}}">
+                <button type="submit">Close Issue</button>
+            </form>
+        {{else}}
+            <form method="POST" action="/issues/open/{{this._id}}">
+                <button type="submit">Open Issue</button>
+            </form>
+        {{/if}} -->
+        <p><label>Comments</label></p>
+        {{#each this.comments}}
+            <p><label>{{this.name}}</label> : {{this.content}}</p>
+        {{/each}}
+        <form method="POST" action="/issues/comment/{{this._id}}">
+            <textarea name="content" cols="40" rows="5"></textarea>
+            <button type="submit">Comment</button>
         </form>
-    {{/if}}
-    <p><label>Likes</label> : {{this.likes}}</p>
-    <form method="POST" action="/issues/like/{{this._id}}">
-        <button type="submit">Like</button>
-    </form>
-    <p>Comments:</p>
-    {{#each this.comments}}
-        <p><label>{{this.name}}</label> : {{this.content}}</p>
-    {{/each}}
-    <form method="POST" action="/issues/comment/{{this._id}}">
-        <textarea name="content" cols="40" rows="5"></textarea>
-        <button type="submit">Comment</button>
-    </form>
-    <br>
+    </div>
 {{/each}}

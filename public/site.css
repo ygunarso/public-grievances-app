@@ -1,9 +1,24 @@
-html {
-    background-color: white;
+html, body {
     background-color: #262A2F;
     color: #C9CCD3;
     font-family: "Roboto", Helvetica, sans-serif;
     text-align: center;
+}
+
+.panel-heading, .collapse {
+    background-color: #4B5162;
+    color: #C9CCD3;
+    width: 60%;
+    margin: auto;
+}
+
+.collapse {
+    background-color: #262A2F;
+}
+
+.panel-heading {
+    border: 1px solid #C9CCD3;
+    border-radius: 20px;
 }
 
 h1 {
@@ -52,6 +67,10 @@ form p {
 
 }
 
+a {
+    text-decoration: none;
+}
+
 .auth, button {
     font-size: 20pt;
     background-color: #5DADE2;
@@ -72,7 +91,7 @@ form p {
     display: inline;
 }
 
-input, select {
+input, select, textarea {
     font-size: 20pt;
     color: white;
     border-radius: 20px;
@@ -81,6 +100,17 @@ input, select {
     padding: 5px 12px;
 }
 
+textarea {
+    margin: auto;
+    width: 95%;
+    height: 5em;
+}
+
 #radius {
     width: 100px;
+}
+
+.icons {
+    font-size: 10pt;
+    padding: 7px;
 }
