@@ -8,7 +8,7 @@ const constructorMethod = app => {
   // app.use("/users", usersRoutes)
   app.use("/", outRoutes)
   app.use("*", (req, res) => {
-    res.sendStatus(404);
+    res.render('grievances/error', { title: "Error", message: "Route does not exist"});
   });
 };
 module.exports = constructorMethod

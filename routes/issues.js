@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const data = require('../data');
 const issuesData = data.issues;
+const usersData = data.users;
 const { ObjectId } = require('mongodb');
 const file = require('../public/file.js')
 
@@ -59,13 +60,26 @@ router.get('/', async (req, res) => {
 
 router.post('/comment/:id', async (req, res) => {
     try {
-        if (!req.body.content) {
-            console.log("No content typed");
-        } else {
-            await issuesData.addComment(req.session.user, req.body.content, req.params.id);
+		if(req.session.user === undefined){
+            res.render('grievances/login', {message: "You must login first!"});
 		}
-		let issueid = req.params.id
-		res.redirect('/issues/'+issueid);
+		else{
+			if (!req.body.content) {
+				console.log("No content typed");
+			} else {
+				await issuesData.addComment(req.session.user, req.body.content, req.params.id);
+			}
+
+			let issueid = req.params.id
+			const user = await usersData.getUserByEmail(req.session.user)
+			if(user.admin === false){
+				res.redirect('/issues/'+issueid);
+			}
+			else{
+				res.redirect("/issues");
+			}
+			
+		} 
 	} catch (e) {
 		res.sendStatus(400);
 	}
@@ -73,8 +87,19 @@ router.post('/comment/:id', async (req, res) => {
 
 router.post('/close/:id', async (req, res) => {
     try {
-        await issuesData.closeIssue(req.params.id);
-		res.redirect("/issues");
+		if(req.session.user === undefined){
+            res.render('grievances/login', {message: "You must login as Admin first!"});
+		}
+		else{
+			const user = await usersData.getUserByEmail(req.session.user)
+			if(user.admin === true){
+				await issuesData.closeIssue(req.params.id);
+				res.redirect("/issues");
+			}
+			else{
+				res.render('grievances/login', {message: "You must login as Admin first!"});
+			}
+		}
 	} catch (e) {
 		res.sendStatus(400);
 	}
@@ -82,8 +107,19 @@ router.post('/close/:id', async (req, res) => {
 
 router.post('/open/:id', async (req, res) => {
     try {
-        await issuesData.openIssue(req.params.id);
-		res.redirect("/issues");
+		if(req.session.user === undefined){
+            res.render('grievances/login', {message: "You must login as Admin first!"});
+		}
+		else{
+			const user = await usersData.getUserByEmail(req.session.user)
+			if(user.admin === true){
+			await issuesData.openIssue(req.params.id);
+			res.redirect("/issues");
+			}
+			else{
+				res.render('grievances/login', {message: "You must login as Admin first!"});
+			}
+		}
 	} catch (e) {
 		res.sendStatus(400);
 	}

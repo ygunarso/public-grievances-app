@@ -148,7 +148,18 @@ router.get('/adminHome', async (req, res) => {
     try {
         let issueList = await issuesData.getAllIssues();
         let sessionInfo = req.session.user;
-        res.render('grievances/adminHome', { sessionInfo: sessionInfo, issueList: issueList });
+        if(req.session.user === undefined){
+            res.redirect('/');
+        }
+        else{
+            const user = await usersData.getUserByEmail(req.session.user)
+		    if(user.admin === true){
+                res.render('grievances/adminHome', { sessionInfo: sessionInfo, issueList: issueList });
+            }
+            else{
+            res.redirect('/');
+            }
+        }
     } catch (error) {
         res.status(401).json({ error: "Page Not Found" });
     }
@@ -270,7 +281,7 @@ router.get('/ViewAllMyIssues', async (req, res) => {
         const issueByUserId = await issuesData.getIssuesByUserId(newUser._id)
         res.render('grievances/ViewAllMyIssues', { issueByUserId: issueByUserId, sessionInfo: sessionInfo })
     } catch (e) {
-        res.render('grievances/error', { title: "error", message: "No issues found" })
+        res.status(401).render('grievances/login', { message: "Please Login" });
     }
 
 });
