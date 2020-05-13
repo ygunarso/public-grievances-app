@@ -32,7 +32,7 @@ router.get('/:id', async (req, res) => {
 			//res.render('grievances/ViewAllMyIssues', { issueByUserId: issueByUserId, sessionInfo: sessionInfo })
 			res.render('grievances/viewIssue',{issueList:issueList});
 		}
-		
+
 	} catch (e) {
 		res.status(404).json({ error: 'issue not found' });
 	}
@@ -73,14 +73,8 @@ router.post('/comment/:id', async (req, res) => {
 
 			let issueid = req.params.id
 			const user = await usersData.getUserByEmail(req.session.user)
-			if(user.admin === false){
-				res.redirect('/issues/'+issueid);
-			}
-			else{
-				res.redirect("/issues");
-			}
-			
-		} 
+            res.redirect('back');
+		}
 	} catch (e) {
 		res.sendStatus(400);
 	}
@@ -134,12 +128,7 @@ router.post('/like/:id', async (req, res) => {
 		await issuesData.likeIssue(req.params.id);
 		const user = await usersData.getUserByEmail(req.session.user)
 		let issueid = req.params.id
-		if(user.admin === false){
-				res.redirect('/issues/'+issueid);
-		}
-		else{
-				res.redirect("/issues");
-		}
+		res.redirect('back');
 	} catch (e) {
 		res.sendStatus(400);
 	}
@@ -148,7 +137,7 @@ router.post('/like/:id', async (req, res) => {
 router.post('/unlike/:id', async (req, res) => {
     try {
         await issuesData.unlikeIssue(req.params.id);
-		res.redirect("/issues");
+        res.redirect('back');
 	} catch (e) {
 		res.sendStatus(400);
 	}
