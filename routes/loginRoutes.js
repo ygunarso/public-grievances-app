@@ -352,4 +352,26 @@ router.post('/issueDelete/:id', async (req, res) => {
         res.status(500).render()
     }
 });
+
+router.post('/createIssue', async (req, res) => {
+	let issueInfo = req.body;
+    if(req.session.user === undefined){
+		res.status(400).json({ error: 'You must provide user ID' });
+		return;
+	}
+	else {
+		issueInfo.userID = req.session.user;
+	}
+	try {
+		const newIssue = await issuesData.addIssue(issueInfo.name, issueInfo.category,
+						issueInfo.date, issueInfo.latitude, issueInfo.longitude,
+						issueInfo.city, issueInfo.state, issueInfo.userID);
+        //req.session.issue = newUser.email
+		//req.session.AuthCookie = req.sessionID;
+        res.render("partials/feedItem", { layout: null, ...newIssue });
+	} catch (e) {
+		res.sendStatus(400);
+	}
+});
+
 module.exports = router;

@@ -99,7 +99,8 @@ let exportedMethods = {
         let lng_min = parseFloat(lng) - kmToCoordinate(radius);
 
         const issueList = await issueCollection.find({ latitude: { $gt: lat_min, $lt: lat_max } },
-                                                        { longitude: { $gt: lng_min, $lt: lng_max } }).toArray();
+                                                        { longitude: { $gt: lng_min, $lt: lng_max } })
+                                                        .sort({ date: -1 }).toArray();
         return issueList;
     },
     async updateIssue(issueId, name, category, date, latitude,longitude,city,state) {

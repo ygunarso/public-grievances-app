@@ -51,10 +51,18 @@
                 };
                 document.getElementById("latitude").value = pos.lat;
                 document.getElementById("longitude").value = pos.lng;
+                document.getElementById("latitude1").value = pos.lat;
+                document.getElementById("longitude1").value = pos.lng;
                 var geocoder = new google.maps.Geocoder();
                 var infowindow = new google.maps.InfoWindow();
                 geocode(geocoder, pos, infowindow);
                 map.setCenter(pos);
+                var date = new Date();
+                var formatted_date = date.getFullYear().toString() + '-' +
+                                    (date.getMonth() + 1).toString().padStart(2, 0) +
+                                    '-' + date.getDate().toString().padStart(2, 0);
+
+                document.getElementById("date1").value = formatted_date;
             });
         }
         {{#each issueList}}
@@ -78,6 +86,8 @@
                       const state = addr.find(obj => JSON.stringify(obj.types) == JSON.stringify(["administrative_area_level_1", "political"]));
                       document.getElementById("city").textContent = city.short_name;
                       document.getElementById("state").textContent = state.long_name;
+                      document.getElementById("city1").value = city.short_name;
+                      document.getElementById("state1").value = state.long_name;
                   }
               }
           });
@@ -88,44 +98,65 @@
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDs-DaFuYDPJ1ThmZywl6Ve2AMTB03iSGI&callback=initMap">
     </script>
 
+    <form id="createIssue">
+        <label for="name">Issue Name </label>
+        <input type="text" id="name" name="name" required>
+        <label for="category">Issue Category </label>
+        <select id="category" name="category">
+            <option value="Garbage Dump">Garbage Dump</option>
+            <option value="Wrong Parking">Wrong Parking</option>
+            <option value="Bad Roads">Bad Roads</option>
+        </select>
+        <input hidden name="latitude" id="latitude1">
+        <input hidden name="longitude" id="longitude1">
+        <input id="city1" name="city" hidden>
+        <input id="state1" name="state" hidden>
+        <input type="date" id="date1" name="date" hidden>
+        <button type="submit">Submit</button>
+    </form>
+
     {{#if issueList}}
         <h2>Issues Feed</h2>
     {{/if}}
-    {{#each issueList}}
-        <div data-toggle="collapse" data-target="#{{this._id}}" class="panel-heading">
-            <h4 class="panel-title">
-              <p>{{this.name}}</p>
-            </h4>
-            <form method="POST" action="/issues/like/{{this._id}}">
-                <p class="inline">{{this.likes}}</p>
-                <button class="icons" type="submit">Like</button>
-            </form>
-        </div>
-        <div id="{{this._id}}" class="collapse">
-            <p><label>Category</label> : {{this.category}}</p>
-            <p><label>Date</label>: {{this.date}}</p>
-            <p><label>Latitude</label>: {{this.latitude}}</p>
-            <p><label>Longitude</label>: {{this.longitude}}</p>
-            <p><label>City</label>: {{this.city}}</p>
-            <p><label>State</label> : {{this.state}}</p>
-            <p><label>Status</label> : {{this.status}}</p>
-            <!-- {{#if (open status)}}
-                <form method="POST" action="/issues/close/{{this._id}}">
-                    <button type="submit">Close Issue</button>
+    <div id="feed">
+        {{#each issueList}}
+            <div data-toggle="collapse" data-target="#{{this._id}}" class="panel-heading">
+                <h4 class="panel-title">
+                  <p>{{this.name}}</p>
+                </h4>
+                <form method="POST" action="/issues/like/{{this._id}}">
+                    <p class="inline">{{this.likes}}</p>
+                    <button class="icons" type="submit">Like</button>
                 </form>
-            {{else}}
-                <form method="POST" action="/issues/open/{{this._id}}">
-                    <button type="submit">Open Issue</button>
+            </div>
+            <div id="{{this._id}}" class="collapse">
+                <p><label>Category</label> : {{this.category}}</p>
+                <p><label>Date</label>: {{this.date}}</p>
+                <p><label>Latitude</label>: {{this.latitude}}</p>
+                <p><label>Longitude</label>: {{this.longitude}}</p>
+                <p><label>City</label>: {{this.city}}</p>
+                <p><label>State</label> : {{this.state}}</p>
+                <p><label>Status</label> : {{this.status}}</p>
+                <!-- {{#if (open status)}}
+                    <form method="POST" action="/issues/close/{{this._id}}">
+                        <button type="submit">Close Issue</button>
+                    </form>
+                {{else}}
+                    <form method="POST" action="/issues/open/{{this._id}}">
+                        <button type="submit">Open Issue</button>
+                    </form>
+                {{/if}} -->
+                <p><label>Comments</label></p>
+                {{#each this.comments}}
+                    <p><label>{{this.name}}</label> : {{this.content}}</p>
+                {{/each}}
+                <form method="POST" action="/issues/comment/{{this._id}}">
+                    <textarea name="content" cols="40" rows="5"></textarea>
+                    <button type="submit">Comment</button>
                 </form>
-            {{/if}} -->
-            <p><label>Comments</label></p>
-            {{#each this.comments}}
-                <p><label>{{this.name}}</label> : {{this.content}}</p>
-            {{/each}}
-            <form method="POST" action="/issues/comment/{{this._id}}">
-                <textarea name="content" cols="40" rows="5"></textarea>
-                <button type="submit">Comment</button>
-            </form>
-        </div>
-    {{/each}}
+            </div>
+        {{/each}}
+    </div>
+
 </section>
+<script src="/script.js"></script>
