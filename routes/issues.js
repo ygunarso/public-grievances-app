@@ -129,10 +129,12 @@ router.post('/like/:id', async (req, res) => {
 		if (req.session.user === undefined) {
 			res.render('grievances/login', { message: "You must login first!" });
 		}
-		await issuesData.likeIssue(req.params.id);
-		const user = await usersData.getUserByEmail(req.session.user)
-		let issueid = req.params.id
-		res.redirect('back');
+		else{
+			await issuesData.likeIssue(req.params.id);
+			const user = await usersData.getUserByEmail(req.session.user)
+			let issueid = req.params.id
+			res.redirect('back');
+		}
 	} catch (e) {
 		res.sendStatus(400);
 	}
