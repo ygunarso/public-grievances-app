@@ -89,7 +89,8 @@ router.post('/close/:id', async (req, res) => {
 			const user = await usersData.getUserByEmail(req.session.user)
 			if(user.admin === true){
 				await issuesData.closeIssue(req.params.id);
-				res.redirect("/issues");
+				//res.redirect("/issues");
+				res.redirect('back');
 			}
 			else{
 				res.render('grievances/login', {message: "You must login as Admin first!"});
@@ -109,7 +110,8 @@ router.post('/open/:id', async (req, res) => {
 			const user = await usersData.getUserByEmail(req.session.user)
 			if(user.admin === true){
 			await issuesData.openIssue(req.params.id);
-			res.redirect("/issues");
+			//res.redirect("/issues");
+			res.redirect('back');
 			}
 			else{
 				res.render('grievances/login', {message: "You must login as Admin first!"});
