@@ -92,7 +92,7 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDs-DaFuYDPJ1ThmZywl6Ve2AM
 <form method="POST" action="/issueUpdate/{{issue._id}}">
     <br>
     <br>
-    <label>Issue Name </label>
+    <label for="name">Issue Name </label>
     <input type="text" id="name" name="name" value="{{issue.name}}">
     <br>
     <br>
@@ -107,19 +107,19 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDs-DaFuYDPJ1ThmZywl6Ve2AM
     </select>
     <br>
     <br>
-    <label for="date">Issue Date:</label>
+    <label for="date">Issue Date </label>
     <input type="date" id="date" name="date" min="1990-01-01" value="{{issue.date}}">
     <br>
     <br>
-    <label>Latitude </label>
+    <label for="latitude">Latitude </label>
     <input type="text" id="latitude" name="latitude" value="{{issue.latitude}}" readonly>
     <br>
     <br>
-    <label>Longitude </label>
+    <label for="longitude">Longitude </label>
     <input type="text" id="longitude" name="longitude" value="{{issue.longitude}}" readonly>
     <br>
     <br>
-    <label>City </label>
+    <label for="city">City </label>
     <input type="text" id="city" name="city" value="{{issue.city}}" readonly>
     <br>
     <br>

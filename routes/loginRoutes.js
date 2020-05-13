@@ -338,7 +338,7 @@ router.get('/deleteAccount', async (req, res) => {
     try {
         await usersData.removeUser(req.session.user);
         req.session.destroy();
-        res.redirect('/');
+        res.render('grievances/deletedAccount', {});
     } catch (e) {
         res.status(500).render()
     }
