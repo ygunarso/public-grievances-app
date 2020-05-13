@@ -1,4 +1,5 @@
-<p>Load form for update issue</p>
+<h2>Update an Issue</h2>
+
 <a class="auth" href="/userhome">Go Home</a>
 <div id="map"></div>
 <script>
@@ -21,17 +22,21 @@
             };
             //document.getElementById("latitude").value = pos.lat;
             //document.getElementById("longitude").value = pos.lng;
-            var geocoder = new google.maps.Geocoder;
-
-            geocode(geocoder, pos);
+            // var geocoder = new google.maps.Geocoder;
+            //
+            // geocode(geocoder, pos);
             map.setCenter(pos);
             marker.setPosition(pos);
             var date = new Date();
             var formatted_date = date.getFullYear().toString() + '-' +
                                 (date.getMonth() + 1).toString().padStart(2, 0) +
                                 '-' + date.getDate().toString().padStart(2, 0);
+            var min_date = (date.getFullYear() - 1).toString() + '-' +
+                                (date.getMonth() + 1).toString().padStart(2, 0) +
+                                '-' + date.getDate().toString().padStart(2, 0);
             document.getElementById("date").value = formatted_date;
             document.getElementById("date").max = formatted_date;
+            document.getElementById("date").min = min_date;
         });
     }
 
@@ -64,7 +69,6 @@
                   const state = addr.find(obj => JSON.stringify(obj.types) == JSON.stringify(["administrative_area_level_1", "political"]));
                   document.getElementById("city").value = city.short_name;
                   document.getElementById("state").value = state.long_name;
-                  document.getElementById("select").value = state.short_name;
               }
           }
       });
@@ -116,67 +120,11 @@ src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDs-DaFuYDPJ1ThmZywl6Ve2AM
     <br>
     <br>
     <label>City </label>
-    <input type="text" id="city" name="city" value="{{issue.longitude}}" readonly>
+    <input type="text" id="city" name="city" value="{{issue.city}}" readonly>
     <br>
     <br>
     <label for="state">Choose a State:</label>
-    <input type="hidden" id="state" name="state">
-    <select id="select" name="select" disabled="true">
-        <option selected disabled hidden>
-                {{issue.state}}
-        </option>
-        <option value="AL">Alabama</option>
-        <option value="AK">Alaska</option>
-        <option value="AZ">Arizona</option>
-        <option value="AR">Arkansas</option>
-        <option value="CA">California</option>
-        <option value="CO">Colorado</option>
-        <option value="CT">Connecticut</option>
-        <option value="DE">Delaware</option>
-        <option value="DC">District of Columbia</option>
-        <option value="FL">Florida</option>
-        <option value="GA">Georgia</option>
-        <option value="HI">Hawaii</option>
-        <option value="ID">Idaho</option>
-        <option value="IL">Illinois</option>
-        <option value="IN">Indiana</option>
-        <option value="IA">Iowa</option>
-        <option value="KS">Kansas</option>
-        <option value="KY">Kentucky</option>
-        <option value="LA">Louisiana</option>
-        <option value="ME">Maine</option>
-        <option value="MD">Maryland</option>
-        <option value="MA">Massachusetts</option>
-        <option value="MI">Michigan</option>
-        <option value="MN">Minnesota</option>
-        <option value="MS">Mississippi</option>
-        <option value="MO">Missouri</option>
-        <option value="MT">Montana</option>
-        <option value="NE">Nebraska</option>
-        <option value="NV">Nevada</option>
-        <option value="NH">New Hampshire</option>
-        <option value="NJ">New Jersey</option>
-        <option value="NM">New Mexico</option>
-        <option value="NY">New York</option>
-        <option value="NC">North Carolina</option>
-        <option value="ND">North Dakota</option>
-        <option value="OH">Ohio</option>
-        <option value="OK">Oklahoma</option>
-        <option value="OR">Oregon</option>
-        <option value="PA">Pennsylvania</option>
-        <option value="RI">Rhode Island</option>
-        <option value="SC">South Carolina</option>
-        <option value="SD">South Dakota</option>
-        <option value="TN">Tennessee</option>
-        <option value="TX">Texas</option>
-        <option value="UT">Utah</option>
-        <option value="VT">Vermont</option>
-        <option value="VA">Virginia</option>
-        <option value="WA">Washington</option>
-        <option value="WV">West Virginia</option>
-        <option value="WI">Wisconsin</option>
-        <option value="WY">Wyoming</option>
-    </select>
+    <input id="state" name="state" value="{{issue.state}}" readonly>
     <br>
     <br>
     <button type="submit">Submit</button>

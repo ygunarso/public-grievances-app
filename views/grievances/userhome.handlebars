@@ -122,7 +122,7 @@
         {{#each issueList}}
             <div data-toggle="collapse" data-target="#{{this._id}}" class="panel-heading">
                 <h4 class="panel-title">
-                  <p>{{this.name}}</p>
+                  {{this.name}}
                 </h4>
                 <form method="POST" action="/issues/like/{{this._id}}">
                     <p class="inline">{{this.likes}}</p>
