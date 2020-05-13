@@ -29,7 +29,8 @@ router.get('/:id', async (req, res) => {
 			if(issueList === null || issueList === undefined)
 				res.status(404).json({ error: 'No issue found' })
 			else
-				res.render('grievances/viewIssue',{issueList:issueList});
+			//res.render('grievances/ViewAllMyIssues', { issueByUserId: issueByUserId, sessionInfo: sessionInfo })
+			res.render('grievances/viewIssue',{issueList:issueList});
 		}
 		
 	} catch (e) {
@@ -127,8 +128,18 @@ router.post('/open/:id', async (req, res) => {
 
 router.post('/like/:id', async (req, res) => {
     try {
-        await issuesData.likeIssue(req.params.id);
-		res.redirect("/issues");
+		if(req.session.user === undefined){
+            res.render('grievances/login', {message: "You must login first!"});
+		}
+		await issuesData.likeIssue(req.params.id);
+		const user = await usersData.getUserByEmail(req.session.user)
+		let issueid = req.params.id
+		if(user.admin === false){
+				res.redirect('/issues/'+issueid);
+		}
+		else{
+				res.redirect("/issues");
+		}
 	} catch (e) {
 		res.sendStatus(400);
 	}
