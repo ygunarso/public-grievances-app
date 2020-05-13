@@ -78,9 +78,9 @@ let exportedMethods = {
     }
 
     const updatedInfo = await userCollection.updateOne({ email: user }, { $set: updatedUserData });
-    if (updatedInfo.modifiedCount === 0) {
-      throw 'could not update the user successfully';
-    }
+    // if (updatedInfo.modifiedCount === 0) {
+    //   throw 'could not update the user successfully';
+    // }
 
     return await this.getUserByEmail(user);
 
