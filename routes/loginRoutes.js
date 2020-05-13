@@ -7,6 +7,7 @@ const xss = require('xss');
 
 // All Get Methods
 
+
 router.get('/', async (req, res) => {
     try {
         if (req.session.user === undefined) {
@@ -224,6 +225,8 @@ router.get('/logout', async (req, res) => {
         }
         else {
             req.session.destroy();
+            res.clearCookie('AuthCookie');
+            res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
             res.redirect('/');
         }
 

@@ -8,20 +8,24 @@ const cookieParser = require('cookie-parser');
 
 const Handlebars = require('handlebars');
 const handlebarsInstance = exphbs.create({
-    defaultLayout: 'main',
-    // Specify helpers which are only registered on this instance.
-    helpers: {
-        asJSON: (obj, spacing) => {
-          if (typeof spacing === 'number') return new Handlebars.SafeString(JSON.stringify(obj, null, spacing));
+  defaultLayout: 'main',
+  // Specify helpers which are only registered on this instance.
+  helpers: {
+    asJSON: (obj, spacing) => {
+      if (typeof spacing === 'number') return new Handlebars.SafeString(JSON.stringify(obj, null, spacing));
 
-          return new Handlebars.SafeString(JSON.stringify(obj));
-        },
-        open: (value) => {
-            return value === "open";
-        }
+      return new Handlebars.SafeString(JSON.stringify(obj));
+    },
+    open: (value) => {
+      return value === "open";
     }
+  }
 });
-
+app.use(function (req, res, next) {
+  if (!req.user)
+    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+  next();
+});
 app.use(cookieParser());
 app.use(session({
   name: 'AuthCookie',
@@ -31,7 +35,7 @@ app.use(session({
 }))
 app.use(static);
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 
 app.engine('handlebars', handlebarsInstance.engine);
 app.set('view engine', 'handlebars');
