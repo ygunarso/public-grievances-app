@@ -358,9 +358,14 @@ router.post('/issueUpdate/:id', async (req, res) => {
 // Delete User Route
 router.get('/deleteAccount', async (req, res) => {
     try {
-        await usersData.removeUser(req.session.user);
-        req.session.destroy();
-        res.redirect('/');
+        if(req.session.user === undefined){
+            res.redirect('/');
+        }
+        else{
+            await usersData.removeUser(req.session.user);
+            req.session.destroy();
+            res.redirect('/');
+        }
     } catch (e) {
         res.status(500).render()
     }
