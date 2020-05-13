@@ -121,9 +121,9 @@
     <div id="feed">
         {{#each issueList}}
             <div data-toggle="collapse" data-target="#{{this._id}}" class="panel-heading">
-                <h4 class="panel-title">
+                <h3 class="panel-title">
                   {{this.name}}
-                </h4>
+                </h3>
                 <form method="POST" action="/issues/like/{{this._id}}">
                     <p class="inline">{{this.likes}}</p>
                     <button class="icons" type="submit">Like</button>

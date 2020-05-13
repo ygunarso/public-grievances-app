@@ -6,7 +6,7 @@
 <h2>Inside View All My Issues</h2>
 {{#each issueByUserId}}
     <div data-toggle="collapse" data-target="#{{this._id}}" class="panel-heading">
-        <h4 class="panel-title">
+        <h3 class="panel-title">
           {{this.name}}
         </h4>
         <form method="POST" action="/issues/like/{{this._id}}">
