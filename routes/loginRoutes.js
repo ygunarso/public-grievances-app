@@ -3,6 +3,9 @@ const router = express.Router();
 const data = require('../data');
 const usersData = data.users;
 const issuesData = data.issues;
+const xss = require('xss');
+
+// All Get Methods
 
 router.get('/', async (req, res) => {
     try {
@@ -20,10 +23,10 @@ router.get('/', async (req, res) => {
 
 router.get('/login', async (req, res) => {
     try {
-        if(req.session.user === undefined){
+        if (req.session.user === undefined) {
             res.render('grievances/login');
         }
-        else{
+        else {
             res.redirect('userhome');
         }
 
@@ -44,10 +47,10 @@ router.get('/adminLogin', async (req, res) => {
 
 router.get('/signup', async (req, res) => {
     try {
-        if(req.session.user === undefined){
+        if (req.session.user === undefined) {
             res.render('grievances/signup');
         }
-        else{
+        else {
             res.redirect('userhome');
         }
 
@@ -57,43 +60,53 @@ router.get('/signup', async (req, res) => {
 
 });
 
+// All Post Methods
+
 router.post('/signup', async (req, res) => {
     let userInfo = req.body;
+
+    const fn = xss(userInfo.firstName);
+    const ln = xss(userInfo.lastName);
+    const em = xss(userInfo.email);
+    const ci = xss(userInfo.city);
+    const hp = xss(userInfo.hashedPassword);
+    const st = xss(userInfo.state);
+
     if (!userInfo) {
         res.status(400).json({ error: 'You must provide data to create a user' });
         return;
     }
-    if (!userInfo.firstName) {
+    if (!fn) {
         res.status(400).json({ error: 'You must provide a first name' });
         return;
     }
-    if (!userInfo.lastName) {
+    if (!ln) {
         res.status(400).json({ error: 'You must provide a last name' });
         return;
     }
-    if (!userInfo.email) {
+    if (!em) {
         res.status(400).json({ error: 'You must provide an email' });
         return;
     }
-    if (!userInfo.city) {
+    if (!ci) {
         res.status(400).json({ error: 'You must provide city' });
         return;
     }
-    if (!userInfo.hashedPassword) {
+    if (!hp) {
         res.status(400).json({ error: 'You must provide password' });
         return;
     }
-    if (!userInfo.state) {
+    if (!st) {
         res.status(400).json({ error: 'You must provide state' });
         return;
     }
     try {
-        const newUser = await usersData.addUser(userInfo.firstName, userInfo.lastName, userInfo.email, userInfo.hashedPassword, userInfo.city, userInfo.state);
+        const newUser = await usersData.addUser(fn, ln, em, ci, hp, st);
         //res.json(newUser);
-        if (newUser === 1){
-            res.render('grievances/error', { title: "Error", message: "User With this email Id already exists"});
+        if (newUser === 1) {
+            res.render('grievances/error', { title: "Error", message: "User With this email Id already exists" });
         }
-        else{
+        else {
             req.session.user = newUser.email
             req.session.AuthCookie = req.sessionID;
             return res.status(201).redirect("userhome");
@@ -109,10 +122,12 @@ router.post('/login', async (req, res) => {
     try {
         console.log("Logging Innnn")
         let login_form_parameters = req.body;
-        let user_auth = await usersData.logInUser(login_form_parameters.email, login_form_parameters.password);
+        const lemail = xss(login_form_parameters.email);
+        const lpass = xss(login_form_parameters.password);
+        let user_auth = await usersData.logInUser(lemail, lpass);
         //here hashpassword is actually password entered by the user!! It is not hashed
         if (user_auth != -1) {
-            req.session.user = login_form_parameters.email;
+            req.session.user = lemail;
             req.session.AuthCookie = req.sessionID; // alis for req.session.id;
             return res.status(201).redirect("userhome");
         } else {
@@ -129,10 +144,12 @@ router.post('/adminLogin', async (req, res) => {
     try {
         console.log(" Admin Logging Innnn")
         let login_form_parameters = req.body;
-        let user_auth = await usersData.logInAdmin(login_form_parameters.email, login_form_parameters.password); // Admin Login function called
+        const aemail = xss(login_form_parameters.email);
+        const apass = xss(login_form_parameters.password);
+        let user_auth = await usersData.logInAdmin(aemail, apass); // Admin Login function called
         //here hashpassword is actually password entered by the user!! It is not hashed
         if (user_auth != -1) {
-            req.session.user = login_form_parameters.email;
+            req.session.user = aemail;
             req.session.AuthCookie = req.sessionID; // alis for req.session.id;
             return res.status(201).redirect("adminHome");
         } else {
@@ -148,16 +165,16 @@ router.get('/adminHome', async (req, res) => {
     try {
         let issueList = await issuesData.getAllIssues();
         let sessionInfo = req.session.user;
-        if(req.session.user === undefined){
+        if (req.session.user === undefined) {
             res.redirect('/');
         }
-        else{
+        else {
             const user = await usersData.getUserByEmail(req.session.user)
-		    if(user.admin === true){
+            if (user.admin === true) {
                 res.render('grievances/adminHome', { sessionInfo: sessionInfo, issueList: issueList });
             }
-            else{
-            res.redirect('/');
+            else {
+                res.redirect('/');
             }
         }
     } catch (error) {
@@ -169,11 +186,11 @@ router.get('/adminHome', async (req, res) => {
 router.get('/userhome', async (req, res) => {
     try {
         let sessionInfo = req.session.user
-        if(req.session.user === undefined){
+        if (req.session.user === undefined) {
             res.render('grievances/index');
         }
-        else{
-            res.render('grievances/userhome',{sessionInfo:sessionInfo});
+        else {
+            res.render('grievances/userhome', { sessionInfo: sessionInfo });
         }
 
     } catch (error) {
@@ -187,9 +204,9 @@ router.post('/viewNearbyIssues', async (req, res) => {
         let sessionInfo = req.session.user;
         const issueInfo = req.body;
         let issueList = await issuesData.getNearbyIssues(issueInfo.latitude,
-                                        issueInfo.longitude,
-                                        issueInfo.radius);
-        if(req.session.user === undefined){
+            issueInfo.longitude,
+            issueInfo.radius);
+        if (req.session.user === undefined) {
             res.render('grievances/index', { issueList: issueList, radius: issueInfo.radius });
         } else {
             res.render('grievances/userhome', { issueList: issueList, radius: issueInfo.radius });
@@ -202,10 +219,10 @@ router.post('/viewNearbyIssues', async (req, res) => {
 
 router.get('/logout', async (req, res) => {
     try {
-        if(req.session.user === undefined){
+        if (req.session.user === undefined) {
             res.redirect('/');
         }
-        else{
+        else {
             req.session.destroy();
             res.redirect('/');
         }
@@ -221,12 +238,12 @@ router.get('/logout', async (req, res) => {
 router.get('/profile', async (req, res) => {
     try {
         let sessionInfo = req.session.user
-        if(req.session.user === undefined){
+        if (req.session.user === undefined) {
             res.render('grievances/index');
         }
-        else{
+        else {
             const newUser = await usersData.getUserByEmail(req.session.user); //userId?
-            res.render('grievances/profile', { newUser: newUser,sessionInfo:sessionInfo})
+            res.render('grievances/profile', { newUser: newUser, sessionInfo: sessionInfo })
         }
 
     } catch (e) {
@@ -249,23 +266,28 @@ router.get('/profileupdate', async (req, res) => {
 
 router.post('/profileupdate', async (req, res) => {
     const requestBody = req.body;
+    const ufn = xss(requestBody.firstName);
+    const uln = xss(requestBody.lastName);
+    const uem = xss(requestBody.email);
+    const uci = xss(requestBody.city);
+    const ust = xss(requestBody.state);
     let updatedObject = {};
     try {
         const oldPost = await usersData.getUserByEmail(req.session.user);
-        if (requestBody.firstName && requestBody.firstName !== oldPost.firstName) updatedObject.firstName = requestBody.firstName;
-        if (requestBody.lastName && requestBody.lastName !== oldPost.lastName) updatedObject.lastName = requestBody.lastName;
-        if (requestBody.email && requestBody.email !== oldPost.email) updatedObject.email = requestBody.email;
-        if (requestBody.city && requestBody.city !== oldPost.city)
-            updatedObject.city = requestBody.city;
-        if (requestBody.state && requestBody.state !== oldPost.state)
-            updatedObject.state = requestBody.state;
+        if (ufn && ufn !== oldPost.firstName) updatedObject.firstName = ufn;
+        if (uln && uln !== oldPost.lastName) updatedObject.lastName = uln;
+        if (uem && uem !== oldPost.email) updatedObject.email = uem;
+        if (uci && uci !== oldPost.city)
+            updatedObject.city = uci;
+        if (ust && ust !== oldPost.state)
+            updatedObject.state = ust;
     } catch (e) {
         res.status(404).json({ error: 'User not found to modify the record' });
         return;
     }
 
     try {
-        const updatedUser = await usersData.updateUser(req.session.user, requestBody.firstName, requestBody.lastName, requestBody.email, requestBody.city, requestBody.state);
+        const updatedUser = await usersData.updateUser(req.session.user, ufn, uln, uem, uci, ust);
         res.render('grievances/UserUpdateSuccessful', { newUser: updatedUser })
         // res.json(updatedUser);
     } catch (e) {
@@ -354,24 +376,24 @@ router.post('/issueDelete/:id', async (req, res) => {
 });
 
 router.post('/createIssue', async (req, res) => {
-	let issueInfo = req.body;
-    if(req.session.user === undefined){
-		res.status(400).json({ error: 'You must provide user ID' });
-		return;
-	}
-	else {
-		issueInfo.userID = req.session.user;
-	}
-	try {
-		const newIssue = await issuesData.addIssue(issueInfo.name, issueInfo.category,
-						issueInfo.date, issueInfo.latitude, issueInfo.longitude,
-						issueInfo.city, issueInfo.state, issueInfo.userID);
+    let issueInfo = req.body;
+    if (req.session.user === undefined) {
+        res.status(400).json({ error: 'You must provide user ID' });
+        return;
+    }
+    else {
+        issueInfo.userID = req.session.user;
+    }
+    try {
+        const newIssue = await issuesData.addIssue(issueInfo.name, issueInfo.category,
+            issueInfo.date, issueInfo.latitude, issueInfo.longitude,
+            issueInfo.city, issueInfo.state, issueInfo.userID);
         //req.session.issue = newUser.email
-		//req.session.AuthCookie = req.sessionID;
+        //req.session.AuthCookie = req.sessionID;
         res.render("partials/feedItem", { layout: null, ...newIssue });
-	} catch (e) {
-		res.sendStatus(400);
-	}
+    } catch (e) {
+        res.sendStatus(400);
+    }
 });
 
 module.exports = router;
