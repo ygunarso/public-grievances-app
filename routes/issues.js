@@ -41,6 +41,10 @@ router.get('/:id', async (req, res) => {
 
 router.get('/user/:id', async (req, res) => {
 	try {
+		if (req.session.user === undefined) {
+	        res.render('grievances/index');
+	        return;
+	    }
 		let issueList = await issuesData.getIssuesByUserId(req.params.id);
 		if (issueList === null || issueList === undefined)
 			res.status(404).json({ error: 'No issue found' })
@@ -53,6 +57,9 @@ router.get('/user/:id', async (req, res) => {
 
 router.get('/', async (req, res) => {
 	try {
+		if (req.session.user === undefined) {
+			res.render('grievances/login', { message: "You must login first!" });
+		}
 		let issueList = await issuesData.getAllIssues();
 		res.render('grievances/issue', { issueList: issueList });
 	} catch (e) {
@@ -142,6 +149,9 @@ router.post('/like/:id', async (req, res) => {
 
 router.post('/unlike/:id', async (req, res) => {
 	try {
+		if (req.session.user === undefined) {
+			res.render('grievances/login', { message: "You must login first!" });
+		}
 		await issuesData.unlikeIssue(req.params.id);
 		res.redirect('back');
 	} catch (e) {
@@ -156,8 +166,7 @@ router.post('/createIssue', async (req, res) => {
 
 
 	if (req.session.user === undefined) {
-		res.status(400).json({ error: 'You must provide user ID' });
-		return;
+		res.render('grievances/login', { message: "You must login first!" });
 	}
 	else {
 		issueInfo.userID = req.session.user;
@@ -211,6 +220,9 @@ router.post('/createIssue', async (req, res) => {
 });
 
 router.post('/download', async (req, res) => {
+	if (req.session.user === undefined) {
+		res.render('grievances/login', { message: "You must login first!" });
+	}
 	try {
 		file.downloadFile();
 		res.redirect("/issues");

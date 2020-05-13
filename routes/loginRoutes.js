@@ -73,6 +73,7 @@ router.post('/signup', async (req, res) => {
     const hp = xss(userInfo.hashedPassword);
     const st = xss(userInfo.state);
 
+
     if (!userInfo) {
         res.status(400).json({ error: 'You must provide data to create a user' });
         return;
@@ -121,7 +122,7 @@ router.post('/signup', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     try {
-        console.log("Logging Innnn")
+        console.log("Logging In")
         let login_form_parameters = req.body;
         const lemail = xss(login_form_parameters.email);
         const lpass = xss(login_form_parameters.password);
@@ -143,7 +144,7 @@ router.post('/login', async (req, res) => {
 
 router.post('/adminLogin', async (req, res) => {
     try {
-        console.log(" Admin Logging Innnn")
+        console.log("Admin Logging In")
         let login_form_parameters = req.body;
         const aemail = xss(login_form_parameters.email);
         const apass = xss(login_form_parameters.password);
@@ -259,6 +260,10 @@ router.get('/profile', async (req, res) => {
 
 router.get('/profileupdate', async (req, res) => {
     try {
+        if (req.session.user === undefined) {
+            res.render('grievances/index');
+            return;
+        }
         const newUser = await usersData.getUserByEmail(req.session.user);
         res.render('grievances/profileupdate', { newUser: newUser })
     } catch (e) {
@@ -268,6 +273,10 @@ router.get('/profileupdate', async (req, res) => {
 });
 
 router.post('/profileupdate', async (req, res) => {
+    if (req.session.user === undefined) {
+        res.render('grievances/index');
+        return;
+    }
     const requestBody = req.body;
     const ufn = xss(requestBody.firstName);
     const uln = xss(requestBody.lastName);
@@ -301,10 +310,15 @@ router.post('/profileupdate', async (req, res) => {
 //view all my issues
 router.get('/ViewAllMyIssues', async (req, res) => {
     try {
-        const newUser = await usersData.getUserByEmail(req.session.user); //userId?
-        let sessionInfo = req.session.user
-        const issueByUserId = await issuesData.getIssuesByUserId(newUser._id)
-        res.render('grievances/ViewAllMyIssues', { issueByUserId: issueByUserId, sessionInfo: sessionInfo })
+        if (req.session.user === undefined) {
+            res.render('grievances/index');
+        }
+        else {
+            const newUser = await usersData.getUserByEmail(req.session.user); //userId?
+            let sessionInfo = req.session.user
+            const issueByUserId = await issuesData.getIssuesByUserId(newUser._id)
+            res.render('grievances/ViewAllMyIssues', { issueByUserId: issueByUserId, sessionInfo: sessionInfo })
+        }
     } catch (e) {
         res.status(401).render('grievances/login', { message: "Please Login" });
     }
@@ -376,8 +390,13 @@ router.get('/deleteAccount', async (req, res) => {
 //delete issue
 router.post('/issueDelete/:id', async (req, res) => {
     try {
-        const result = await issuesData.removeIssue(req.params.id)
-        res.redirect('/ViewAllMyIssues');
+        if (req.session.user === undefined) {
+            res.render('grievances/index');
+        }
+        else {
+            const result = await issuesData.removeIssue(req.params.id);
+            res.redirect('/ViewAllMyIssues');
+        }
     } catch (e) {
         res.status(500).render()
     }

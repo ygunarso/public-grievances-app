@@ -1,5 +1,5 @@
 <section>
-    <h2>{{title}}</h2>
+    <h2>Profile Update</h2>
     <a class="auth" href="/userhome">Go Home</a>
     <form id="editprofile-form" method="POST" action="/profileupdate">
         <label for="firstName">First Name</label>
@@ -18,8 +18,9 @@
         <input type="text" id="city" name="city" placeholder="Enter City" value = "{{newUser.city}}" ><br>
         <br>
 
-        <label for="state">Choose a State:</label>
+        <label for="state">State</label>
         <select id="state" name="state" required>
+            <option disabled hidden value="">Placeholder</option>
             <option selected disabled hidden>
                 {{newUser.state}}
             </option>
