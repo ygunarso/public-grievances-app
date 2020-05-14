@@ -7,7 +7,7 @@ const xss = require('xss');
 
 // All Get Methods
 
-
+//Using get to call homepage
 router.get('/', async (req, res) => {
     try {
         if (req.session.user === undefined) {
@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
     }
 
 });
-
+//Using get to call login page
 router.get('/login', async (req, res) => {
     try {
         if (req.session.user === undefined) {
@@ -36,7 +36,7 @@ router.get('/login', async (req, res) => {
     }
 
 });
-
+//Using get to loginadmin
 router.get('/adminLogin', async (req, res) => {
     try {
         res.render('grievances/adminLogin');
@@ -45,7 +45,7 @@ router.get('/adminLogin', async (req, res) => {
     }
 
 });
-
+//Using get to signup
 router.get('/signup', async (req, res) => {
     try {
         if (req.session.user === undefined) {
@@ -62,7 +62,7 @@ router.get('/signup', async (req, res) => {
 });
 
 // All Post Methods
-
+//Using Post for signing up
 router.post('/signup', async (req, res) => {
     let userInfo = req.body;
 
@@ -119,7 +119,7 @@ router.post('/signup', async (req, res) => {
     }
 
 });
-
+//Using Post for login
 router.post('/login', async (req, res) => {
     try {
         console.log("Logging In")
@@ -141,7 +141,7 @@ router.post('/login', async (req, res) => {
 
 });
 
-
+//Using Post for admin login
 router.post('/adminLogin', async (req, res) => {
     try {
         console.log("Admin Logging In")
@@ -162,7 +162,7 @@ router.post('/adminLogin', async (req, res) => {
     }
 
 });
-
+//Using get for adminHome
 router.get('/adminHome', async (req, res) => {
     try {
         let issueList = await issuesData.getAllIssues();
@@ -184,7 +184,7 @@ router.get('/adminHome', async (req, res) => {
     }
 
 });
-
+//Using get for user home
 router.get('/userhome', async (req, res) => {
     try {
         let sessionInfo = req.session.user
@@ -200,7 +200,7 @@ router.get('/userhome', async (req, res) => {
     }
 
 });
-
+//Using post for viewing nearbyIssues
 router.post('/viewNearbyIssues', async (req, res) => {
     try {
         let sessionInfo = req.session.user;
@@ -218,7 +218,7 @@ router.post('/viewNearbyIssues', async (req, res) => {
     }
 
 });
-
+//Using get for logging out
 router.get('/logout', async (req, res) => {
     try {
         if (req.session.user === undefined) {
@@ -271,7 +271,7 @@ router.get('/profileupdate', async (req, res) => {
     }
 
 });
-
+//Using post to update profile
 router.post('/profileupdate', async (req, res) => {
     if (req.session.user === undefined) {
         res.render('grievances/index');
@@ -339,7 +339,7 @@ router.get('/issueUpdate/:id', async (req, res) => {
         res.render('grievances/error', { title: "error", message: e })
     }
 });
-
+//using post to update issue
 router.post('/issueUpdate/:id', async (req, res) => {
     if (req.session.user === undefined) {
         return res.render('grievances/error', { title: "error", message: "User Not Logged In" })
@@ -401,7 +401,7 @@ router.post('/issueDelete/:id', async (req, res) => {
         res.status(500).render()
     }
 });
-
+//Using post to create issue
 router.post('/createIssue', async (req, res) => {
     let issueInfo = req.body;
     if (req.session.user === undefined) {
