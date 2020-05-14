@@ -46,6 +46,18 @@ const main = async () => {
 	}
 	await userCollection.insertOne(rajit);
 
+	const devila = {
+		firstName:"Devila",
+		lastName:"Bakrania",
+		email:"devi.bakrania@gmail.com",
+		hashedPassword:"$2a$10$L3aCxsRzbOVxuJ1hXAOFZ.YdZSPd4YN.xCim/HBRf7712WnV7PH8e",
+		city:"Jersey City",
+		admin:false,
+		issues:[],
+		state:"New Jersey"
+	}
+	await userCollection.insertOne(devila);
+
 	const steve = {
 		firstName:"steve",
 		lastName:"gunarso",
