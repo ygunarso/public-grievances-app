@@ -7,6 +7,7 @@ const { ObjectId } = require('mongodb');
 const file = require('../public/file.js')
 const xss = require('xss');
 
+//Using get request to get create issues.
 router.get('/createIssue', async (req, res) => {
 	try {
 		if (req.session.user === undefined) {
@@ -18,7 +19,7 @@ router.get('/createIssue', async (req, res) => {
 		res.status(401).json({ error: "Page Not Found" });
 	}
 });
-
+//Using get request using "id" as a parameter
 router.get('/:id', async (req, res) => {
 	try {
 		if (req.session.user === undefined) {
@@ -55,6 +56,7 @@ router.get('/:id', async (req, res) => {
 // 	}
 // });
 
+//Home page using get request
 router.get('/', async (req, res) => {
 	try {
 		if (req.session.user === undefined) {
@@ -67,6 +69,7 @@ router.get('/', async (req, res) => {
 	}
 });
 
+//Posting comment using id as parameter.
 router.post('/comment/:id', async (req, res) => {
 	try {
 		if (req.session.user === undefined) {
@@ -96,6 +99,7 @@ router.post('/comment/:id', async (req, res) => {
 	}
 });
 
+//Posting to close using id as parameter
 router.post('/close/:id', async (req, res) => {
 	try {
 		if (req.session.user === undefined) {
@@ -117,6 +121,7 @@ router.post('/close/:id', async (req, res) => {
 	}
 });
 
+//using post to open using id as parameter
 router.post('/open/:id', async (req, res) => {
 	try {
 		if (req.session.user === undefined) {
@@ -138,6 +143,7 @@ router.post('/open/:id', async (req, res) => {
 	}
 });
 
+//Posting like using id as parameter
 router.post('/like/:id', async (req, res) => {
 	try {
 		if (req.session.user === undefined) {
@@ -166,6 +172,7 @@ router.post('/like/:id', async (req, res) => {
 // 	}
 // });
 
+//Posting to create Issues
 router.post('/createIssue', async (req, res) => {
 	const issueInfo = req.body;
 	const iname = xss(issueInfo.name); // only one field can be edited by user
@@ -225,6 +232,7 @@ router.post('/createIssue', async (req, res) => {
 	}
 });
 
+//posting to download 
 router.post('/download', async (req, res) => {
 	if (req.session.user === undefined) {
 		res.render('grievances/login', { message: "You must login first!" });
