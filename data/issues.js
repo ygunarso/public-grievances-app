@@ -11,11 +11,13 @@ function kmToCoordinate(km) {
 }
 
 let exportedMethods = {
+    //Get all Issues
     async getAllIssues() {
         const issueCollection = await issues();
         const issueList = await issueCollection.find({}).sort({ date: -1 }).toArray();
         return issueList;
     },
+    // Get all issues by user id
     async getIssuesByUserId(userID) {
         const user = await users.getUserById(userID);
         const issues = user.issues;
@@ -27,12 +29,14 @@ let exportedMethods = {
         if (!issueList) throw 'User has no issues!';
         return issueList;
     },
+    //get issues by id
     async getIssueById(id) {
         id = ObjectId(id);
         const issueCollection = await issues();
         const issue = await issueCollection.findOne({ _id: id });
         return issue;
     },
+    //add new Issue
     async addIssue(name, category, date, latitude, longitude, city, state, userID) { // user
         if (!name) throw 'Issue name missing.';
         if (!category) throw 'Category missing.';
@@ -66,30 +70,35 @@ let exportedMethods = {
         const issue = await this.getIssueById(id);
         return issue;
     },
+    // get issues by category
     async getIssuesByCategory(category) {
         const issueCollection = await issues();
         const issueList = await issueCollection.find({ category: category })
             .sort({ date: -1 }).toArray();
         return issueList;
     },
+    //get issues by city
     async getIssuesByCity(city) {
         const issueCollection = await issues();
         const issueList = await issueCollection.find({ city: city })
             .sort({ date: -1 }).toArray();
         return issueList;
     },
+    //get issues by state
     async getIssuesByState(state) {
         const issueCollection = await issues();
         const issueList = await issueCollection.find({ state: state })
             .sort({ date: -1 }).toArray();
         return issueList;
     },
+    //get issues by status
     async getIssuesByStatus(status) {
         const issueCollection = await issues();
         const issueList = await issueCollection.find({ status: status })
             .sort({ date: -1 }).toArray();
         return issueList;
     },
+    //get nearby issues
     async getNearbyIssues(lat, lng, radius) {
         const issueCollection = await issues();
         let lat_max = parseFloat(lat) + kmToCoordinate(radius);
@@ -103,6 +112,7 @@ let exportedMethods = {
                                                         .sort({ date: -1 }).toArray();
         return issueList;
     },
+    // Update issues
     async updateIssue(issueId, name, category, date, latitude,longitude,city,state) {
         issueId = ObjectId(issueId)
         const issueCollection = await issues();
@@ -138,6 +148,7 @@ let exportedMethods = {
         return await this.getIssueById(issueId)
 
     },
+    //remove issues
     async removeIssue(id) {
         if (!id) throw 'Issue ID missing';
         const issueCollection = await issues();
@@ -165,6 +176,7 @@ let exportedMethods = {
         }
         return true;
     },
+    //Close issue
     async closeIssue(id) {
         if (!id) throw 'Issue ID missing';
         const issueCollection = await issues();
@@ -175,6 +187,7 @@ let exportedMethods = {
         }
         return await this.getIssueById(id);
     },
+    //Open issue
     async openIssue(id) {
         if (!id) throw 'Issue ID missing';
         const issueCollection = await issues();
@@ -185,6 +198,7 @@ let exportedMethods = {
         }
         return await this.getIssueById(id);
     },
+    //Like Issues
     async likeIssue(id) {
         if (!id) throw 'Issue ID missing';
         const issueCollection = await issues();
@@ -195,6 +209,7 @@ let exportedMethods = {
         }
         return await this.getIssueById(id);
     },
+    //Unlike Issues
     async unlikeIssue(id) {
         if (!id) throw 'Issue ID missing';
         const issueCollection = await issues();
@@ -206,10 +221,12 @@ let exportedMethods = {
         return await this.getIssueById(id);
     },
 
+    //Get all comments
     async getAllComments(issueId) {
         const issue = await this.getIssueById(issueId);
         return issue.comments;
     },
+    //add comments
     async addComment(name, content, issueId) {
         const issueCollection = await issues();
 
