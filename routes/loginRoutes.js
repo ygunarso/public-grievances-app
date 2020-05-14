@@ -256,7 +256,7 @@ router.get('/profile', async (req, res) => {
 
 });
 
-// profile update Routes
+// Using get to update profile 
 
 router.get('/profileupdate', async (req, res) => {
     try {
@@ -307,7 +307,7 @@ router.post('/profileupdate', async (req, res) => {
     }
 });
 
-//view all my issues
+//Using get to view all my issues
 router.get('/ViewAllMyIssues', async (req, res) => {
     try {
         if (req.session.user === undefined) {
@@ -325,7 +325,7 @@ router.get('/ViewAllMyIssues', async (req, res) => {
 
 });
 
-//update issues
+//Using get to update issues
 router.get('/issueUpdate/:id', async (req, res) => {
     try {
         if (req.session.user === undefined) {
