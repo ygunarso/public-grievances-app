@@ -164,7 +164,6 @@ router.post('/createIssue', async (req, res) => {
 	const iname = xss(issueInfo.name); // only one field can be edited by user
 
 
-
 	if (req.session.user === undefined) {
 		res.render('grievances/login', { message: "You must login first!" });
 	}
@@ -225,7 +224,7 @@ router.post('/download', async (req, res) => {
 	}
 	try {
 		file.downloadFile();
-		res.redirect("/issues");
+		res.redirect("/adminHome");
 	} catch (e) {
 		res.sendStatus(400);
 	}
