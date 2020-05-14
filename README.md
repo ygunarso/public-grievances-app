@@ -28,3 +28,9 @@ $ npm seed
 $ npm start
 ```
 Go to <a href="https://localhost:3000">this link</a>.
+
+## More Information
+
+1. Admin accounts will be able to view all posted issues through the admin login
+2. Admin accounts will also be able to create new issues through the user login
+3. The "Download All Issues" button will download all the posted issues as a "summary.txt" file to the project folder
