@@ -26,6 +26,30 @@ app.use(function (req, res, next) {
     res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
   next();
 });
+
+//Middleware to record to show the current path and request method.
+var urlVisisted = [];
+app.use(function (req, res, next) {
+  if (req.originalUrl in urlVisisted) urlVisisted[req.originalUrl] += 1;
+  else urlVisisted[req.originalUrl] = 1;
+  console.log("URL path: " + req.originalUrl);
+  console.log("HTTP verb: " + req.method);
+  next();
+});
+
+//Middleware to record the count of URL hits.
+app.use(function (req, res, next) {
+  console.log(
+    "URL " +
+      req.originalUrl +
+      " has been requested for " +
+      urlVisisted[req.originalUrl] +
+      " times."
+  );
+  console.log(urlVisisted);
+  next();
+});
+
 app.use(cookieParser());
 app.use(session({
   name: 'AuthCookie',
