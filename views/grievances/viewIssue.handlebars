@@ -17,6 +17,7 @@
     {{/each}}
     <form method="POST" action="/issues/comment/{{this._id}}">
         <textarea style="width: 60%" name="content" rows="5"></textarea><br>
+        <input type="hidden" id="hidcmt" value="hidcmt" name="hidcmt">
         <button type="submit">Comment</button>
     </form>
     <br>

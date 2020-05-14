@@ -39,21 +39,21 @@ router.get('/:id', async (req, res) => {
 	}
 });
 
-router.get('/user/:id', async (req, res) => {
-	try {
-		if (req.session.user === undefined) {
-	        res.render('grievances/index');
-	        return;
-	    }
-		let issueList = await issuesData.getIssuesByUserId(req.params.id);
-		if (issueList === null || issueList === undefined)
-			res.status(404).json({ error: 'No issue found' })
-		else
-			res.render('grievances/issue', { issueList: issueList });
-	} catch (e) {
-		res.status(404).json({ error: 'issue not found' });
-	}
-});
+// router.get('/user/:id', async (req, res) => {
+// 	try {
+// 		if (req.session.user === undefined) {
+// 	        res.render('grievances/index');
+// 	        return;
+// 	    }
+// 		let issueList = await issuesData.getIssuesByUserId(req.params.id);
+// 		if (issueList === null || issueList === undefined)
+// 			res.status(404).json({ error: 'No issue found' })
+// 		else
+// 			res.render('grievances/issue', { issueList: issueList });
+// 	} catch (e) {
+// 		res.status(404).json({ error: 'issue not found' });
+// 	}
+// });
 
 router.get('/', async (req, res) => {
 	try {
@@ -79,10 +79,17 @@ router.post('/comment/:id', async (req, res) => {
 			} else {
 				await issuesData.addComment(req.session.user, cc, req.params.id);
 			}
-
 			let issueid = req.params.id
 			const user = await usersData.getUserByEmail(req.session.user)
-			res.redirect('back');
+			if(req.body.hidcmt){
+				let sessionInfo = req.session.user;
+				const newIssue = await issuesData.getIssueById(issueid)
+				const issueList = [newIssue];
+				res.render('grievances/viewIssue', { issueList: issueList, sessionInfo: sessionInfo });
+			}
+			else{
+				res.redirect('back');
+			}
 		}
 	} catch (e) {
 		res.sendStatus(400);
@@ -147,17 +154,17 @@ router.post('/like/:id', async (req, res) => {
 	}
 });
 
-router.post('/unlike/:id', async (req, res) => {
-	try {
-		if (req.session.user === undefined) {
-			res.render('grievances/login', { message: "You must login first!" });
-		}
-		await issuesData.unlikeIssue(req.params.id);
-		res.redirect('back');
-	} catch (e) {
-		res.sendStatus(400);
-	}
-});
+// router.post('/unlike/:id', async (req, res) => {
+// 	try {
+// 		if (req.session.user === undefined) {
+// 			res.render('grievances/login', { message: "You must login first!" });
+// 		}
+// 		await issuesData.unlikeIssue(req.params.id);
+// 		res.redirect('back');
+// 	} catch (e) {
+// 		res.sendStatus(400);
+// 	}
+// });
 
 router.post('/createIssue', async (req, res) => {
 	const issueInfo = req.body;
