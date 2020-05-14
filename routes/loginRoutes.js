@@ -103,7 +103,7 @@ router.post('/signup', async (req, res) => {
         return;
     }
     try {
-        const newUser = await usersData.addUser(fn, ln, em, ci, hp, st);
+        const newUser = await usersData.addUser(fn, ln, em,hp,ci, st);
         //res.json(newUser);
         if (newUser === 1) {
             res.render('grievances/error', { title: "Error", message: "User with this email already exists" });
