@@ -14,6 +14,7 @@ let exportedMethods = {
     if (!userList) throw 'No user in system!';
     return userList
   },
+  //get user by Id
   async getUserById(id) {
     id = ObjectId(id)
     const userCollection = await users();
@@ -28,7 +29,7 @@ let exportedMethods = {
     const user = await userCollection.findOne({ email: email });
     return user;
   },
-
+//add user
   async addUser(firstName, lastName, email, hashedPassword, city, state) {
     const userCollection = await users();
 
@@ -55,6 +56,7 @@ let exportedMethods = {
     if (newInsertInformation.insertedCount === 0) throw 'Insert failed!';
     return await this.getUserById(newInsertInformation.insertedId);
   },
+  //update user
   async updateUser(user, firstName, lastName, emailu, city,
     state) {
 
@@ -85,6 +87,7 @@ let exportedMethods = {
     return await this.getUserByEmail(user);
 
   },
+  //add Issue to user
   async addIssueToUser(userId, issueId) {
     let currentUser = await this.getUserById(userId);
     const userCollection = await users();
@@ -96,6 +99,7 @@ let exportedMethods = {
       throw 'Update failed';
     return await this.getUserById(userId);
   },
+  //remove issue from user
   async removeIssueFromUser(userId, issueId) {
     let currentUser = await this.getUserById(userId);
     const userCollection = await users();
@@ -129,7 +133,7 @@ let exportedMethods = {
     } catch (e) {
       console.log(e);
     }
-
+//delete user info
     const deletionInfo = await userCollection.deleteOne({ email: user });
     if (deletionInfo.deletedCount === 0) {
       throw "Could not delete the User";
