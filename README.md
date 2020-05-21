@@ -1,7 +1,12 @@
 # CS 546 Project: Public Grievances Application
 Group Members: Yohanes Steven Gunarso, Samir Shah, Rajit Gohel, Devila Bakrania
 
-The idea of the application is to allow users (citizens) to post public grievances instantaneously on the web application. The admins (public workers) then verifies the complaint, handles it, and resolves the issue. The value of the application is a platform for easy communication between citizens and local/state government.  This web application can be deployed and integrated in the public service sector of government (police, fire department, etc).
+Video Walkthrough : https://www.youtube.com/watch?v=xEWF8WUnzo4&t=69s
+Video Created by Rajit Gohel
+
+Please replace my google maps API keys with yours in order to view the maps functionality.These keys are present in various handlebars files.
+
+The idea of the application is to allow users (citizens) to post public grievances instantaneously on the web application. The admins (public workers) then verifies the complaint, handles it, and resolves the issue. The value of the application is a platform for easy communication between citizens and local/state government. This web application can be deployed and integrated in the public service sector of government (police, fire department, etc).
 
 ## Setup
 
@@ -20,14 +25,14 @@ $ npm install
 
 ### Populate database with seed file
 ```sh
-$ npm seed
+$ npm run seed
 ```
 
 ### Run Application
 ```sh
 $ npm start
 ```
-Go to <a href="https://localhost:3000">this link</a>.
+Go to http://localhost:3000/
 
 ## More Information
 
