@@ -39,3 +39,22 @@ Go to http://localhost:3000/
 1. Admin accounts will be able to view all posted issues through the admin login
 2. Admin accounts will also be able to create new issues through the user login
 3. The "Download All Issues" button will download all the posted issues as a "summary.txt" file to the project folder
+
+USER LOGIN INFO
+User1
+Email : samir@gmail.com
+Password: Samir123
+User 2
+Email: rajit@gmail.com
+Password: Rajit123
+User 3
+Email: steve@gmail.com
+Password: Steve123
+
+ADMIN LOGIN INFO
+Email: admin@gmail.com
+Password: Admin123
+
+NOTE : Please Use Google Chrome as preferred browser. Enable the user location.
+Please create Issues for each user except Admin.
+Users have been populated using seed file.
