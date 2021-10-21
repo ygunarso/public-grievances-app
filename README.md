@@ -1,5 +1,5 @@
 # CS 546 Project: Public Grievances Application
-Group Members: Yohanes Steven Gunarso, Samir Shah, Rajit Gohel, Devila Bakrania
+Group Members: Steven Gunarso, Samir Shah, Rajit Gohel, Devila Bakrania
 
 Video Walkthrough : https://www.youtube.com/watch?v=xEWF8WUnzo4&t=69s
 Video Created by Rajit Gohel
